@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<script src="js/model/base.js"></script>
+		<script src="js/model/column.js"></script>
+		<script src="js/model/row.js"></script>
+		<script src="js/model/grid.js"></script>
+		<script src="js/exception.js"></script>
+		<script src="js/utilities.js"></script>
+		<script src="js/view/base-view.js"></script>
+		<script src="js/view/grid-view.js"></script>
+		<script src="js/builder/base-builder.js"></script>
+		<script src="js/builder/grid-builder.js"></script>
+		<script src="js/builder/column-builder.js"></script>
+		<script src="js/builder/row-builder.js"></script>
+	</head>
+	<body>
+		<div class="content">
+			<div class="header">
+
+			</div>
+			<div class="body">
+				<div id="ts-grid-container">
+
+				</div>
+			</div>
+			<div class="footer">
+
+			</div>
+		</div>
+		<script>
+			let testData = [{id: 1, name: "sasha", age: 14}, {id: 2, name: "kate", age: 13}];
+			let gridBuilder = new TSGridBuilder();
+			gridBuilder.init();
+			gridBuilder.primaryColumnName = "id";
+			gridBuilder.addColumnConfig(new TSColumn("name", "Name", ColumnType.string, true));
+			gridBuilder.addColumnConfig(new TSColumn("age", "Age", ColumnType.number));
+			gridBuilder.addRows(testData);
+			let gridContainer = document.getElementById("ts-grid-container");
+			gridBuilder.render(gridContainer);
+		</script>
+	</body>
+</html>
