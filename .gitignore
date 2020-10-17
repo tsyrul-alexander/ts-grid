@@ -1,0 +1,12 @@
+# Visual Studio cache/options directory
+.vs/
+# WebStorm cache/options directory
+.idea/
+# Node modules
+node_modules
+# ts files
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts
+# build directory
+dist/

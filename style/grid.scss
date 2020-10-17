@@ -1,0 +1,15 @@
+.grid-container {
+  .container-item {
+    margin: 1px;
+  }
+  .grid-container-columns {
+    display: flex;
+    flex-flow: row wrap;
+  }
+  .grid-container-rows {
+    .row-view {
+      display: flex;
+      flex-flow: row wrap;
+    }
+  }
+}
