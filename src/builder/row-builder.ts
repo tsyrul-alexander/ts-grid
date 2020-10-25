@@ -1,27 +1,38 @@
 import {BaseBuilder} from "./base-builder";
 import {RowViewModel} from "../view-model/row-view-model";
 import {RowModel} from "../model/row-model";
-import {RowView} from "../view/row-view";
-import {ICollection} from "../model/collection/collection";
-import {GridColumn} from "../model/grid-column";
-import {GridRow} from "../model/grid-row";
-import {Container} from "../view/control/container/container";
+import {Collection, ICollection} from "../model/collection/collection";
+import {GridColumn} from "../model/grid/grid-column";
+import {RowsView} from "../view/rows-view";
+import {IControl} from "../view/control/control";
 
 export class RowBuilder extends BaseBuilder {
+	rowsView: RowsView;
+	rowsViewModels: ICollection<RowViewModel> = new Collection();
+	constructor(public columns: ICollection<GridColumn>) {
+		super();
+		this.rowsView = new RowsView(this.columns);
+	}
 	createViewModel(data: object): RowViewModel {
 		let model = this.createModel(data);
 		return Object.create(new RowViewModel(model), this.getViewModelProperties(model));
 	}
-	createView(viewModel: RowViewModel, columns: ICollection<GridColumn>): RowView {
-		return new RowView(viewModel, columns);
+	addRow(data: object): RowViewModel {
+		let viewModel = this.createViewModel(data);
+		this.rowsView.addRow(viewModel);
+		this.rowsViewModels.add(viewModel);
+		return viewModel;
 	}
-	getControl(rows: GridRow[]) {
-		let container = new Container();
-		container.addClass("grid-container-rows");
-		rows.forEach(gridRow => {
-			container.addItem(gridRow.view.getControl());
-		}, this);
-		return container;
+	getControl(columns: ICollection<GridColumn>): IControl {
+		if (this.rowsView) {
+			return this.rowsView.getControl();
+		}
+		this.rowsView = new RowsView(columns);
+		return this.rowsView.getControl();
+	}
+	clear() {
+		this.rowsView.clear();
+		this.rowsViewModels.clear();
 	}
 	getViewModelProperties(model: RowModel) {
 		let properties = {};
@@ -39,7 +50,6 @@ export class RowBuilder extends BaseBuilder {
 			},
 			set: function(value) {
 				this.model.set(columnName, value);
-				this.propertyChanged.fire(columnName);
 			}
 		};
 	}

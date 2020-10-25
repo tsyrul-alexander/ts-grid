@@ -1,22 +1,38 @@
-import {Control, IControl} from "../control";
-import {ContainerItem} from "./container-item";
+import {ControlPrefix, IControl} from "../control";
+import {HTMLControl} from "../html-control";
+import {IItemsControl} from "../items-control";
 
-export class Container extends Control<HTMLDivElement> {
-	protected content: IControl[] = [];
-
+export class Container extends HTMLControl(HTMLDivElement) implements IItemsControl, HTMLDivElement {
+	constructor() {
+		super();
+		this.initHTMLElementClasses();
+	}
 	protected initHTMLElementClasses(): void {
-		this.classes.push("container");
-		super.initHTMLElementClasses();
+		this.addClass("container");
 	}
-	addItem(control: IControl): IControl {
-		let itemContainer = this.createItemContainer(control);
-		this.htmlElement.appendChild(itemContainer.getHTMLElement());
-		return itemContainer;
+	public addItem(control: IControl): IControl {
+		this.appendChild(control.getHTMLElement());
+		return control;
 	}
-	createItemContainer(item: IControl): IControl {
-		return new ContainerItem(item);
+	public removeItem(control: IControl) {
+		this.removeChild(control.getHTMLElement());
 	}
-	createHTMLElement(): HTMLDivElement {
-		return <HTMLDivElement>(document.createElement("div"));
+	public clear(): void {
+		this.textContent = '';
+	}
+	public addContainerItem(control: IControl): IItemsControl {
+		let containerItem = this.createContainerItem(control);
+		this.appendChild(containerItem.getHTMLElement());
+		return containerItem;
+	}
+	public createContainerItem(item: IControl): IItemsControl {
+		let containerItem = new Container();
+		containerItem.addItem(item);
+		return containerItem;
+	}
+	public static register(): void {
+		customElements.define(ControlPrefix + "-container", Container, {extends: "div"});
 	}
 }
+
+Container.register();

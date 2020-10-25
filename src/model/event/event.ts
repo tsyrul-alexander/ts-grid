@@ -1,20 +1,23 @@
-export interface IEvent<T> {
-	on(handler: { (data?: T): void }): void;
-	un(handler: { (data?: T): void }): void;
-	fire(data?: T): void;
+export interface IEvent<TItem, TValue> {
+	on(handler: {(item: TItem, data?: TValue): void}, scope: any): void;
+	un(handler: {(item: TItem, data?: TValue): void}, scope: any): void;
+	fire(item: TItem, data?: TValue): void;
 }
 
-export class Event<T> implements IEvent<T> {
-	private handlers: {(data?: T): void;}[] = [];
-	public on(handler: {(data?: T): void}): void {
-		this.handlers.push(handler);
+export class Event<TItem, TValue> implements IEvent<TItem, TValue> {
+	private handlers: {fn: (item: TItem, data?: TValue) => void, scope: any}[] = [];
+	public on(handler: {(item: TItem, data?: TValue): void}, scope: any): void {
+		this.handlers.push({
+			fn: handler,
+			scope: scope
+		});
 	}
 
-	public un(handler: {(data?: T): void}): void {
-		this.handlers = this.handlers.filter(item => item !== handler);
+	public un(handler: {(item: TItem, data?: TValue): void}, scope: any): void {
+		this.handlers = this.handlers.filter(item => item.fn !== handler && item.scope != scope);
 	}
 
-	public fire(data?: T) : void {
-		this.handlers.forEach(h => h(data));
+	public fire(item: TItem, data?: TValue) : void {
+		this.handlers.forEach(h => h.fn.call(h.scope, item, data));
 	}
 }

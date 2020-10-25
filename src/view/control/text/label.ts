@@ -1,24 +1,19 @@
-import {Control} from "../control";
+import {Event, IEvent} from "../../../model/event/event";
+import {HTMLControl, IHtmlControl} from "../html-control";
+import {IValueControl} from "../value-control";
+import {ControlPrefix} from "../control";
 
-export class Label extends Control<HTMLLabelElement> {
-	public get text(): string {
-		return this.htmlElement.innerText;
+export class Label extends HTMLControl(HTMLLabelElement) implements IHtmlControl {
+	public valueChanged: IEvent<IValueControl, any> = new Event<IValueControl, any>();
+	public static register(): void {
+		customElements.define(ControlPrefix + "-label", Label, {extends: "label"});
 	}
-	public set text(value: string) {
-		this.htmlElement.innerText = value;
+	getValue(): string {
+		return this.innerText;
 	}
-
-	protected initHTMLElementClasses(): void {
-		this.addClass("label");
-		super.initHTMLElementClasses();
-	}
-
-	constructor(value: string = null) {
-		super();
-		this.htmlElement = this.createHTMLElement();
-		this.text = value;
-	}
-	createHTMLElement(): HTMLLabelElement {
-		return <HTMLLabelElement>(document.createElement("label"));
+	setValue(value: string): void {
+		this.innerText = value;
 	}
 }
+
+Label.register();

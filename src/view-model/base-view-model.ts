@@ -7,7 +7,4 @@ export class BaseViewModel<T extends BaseModel> extends BaseObject {
 		super();
 		this.model = model;
 	}
-	subscribeModelEvents(item: T) {
-
-	}
 }
