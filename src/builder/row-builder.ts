@@ -41,7 +41,6 @@ export class RowBuilder extends BaseBuilder {
 			this.setViewModelProperty(properties, model, column);
 		}, this);
 		return properties;
-
 	}
 	setViewModelProperty(properties: object, model: RowModel, columnName: string) {
 		properties[columnName] = {

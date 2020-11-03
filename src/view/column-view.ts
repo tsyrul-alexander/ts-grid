@@ -12,7 +12,7 @@ export class ColumnView extends BaseView {
 		let container = new Container();
 		container.addClass("column-view");
 		let label = new Label();
-		label.setValue(this.gridColumn.columnName);
+		label.setValue(this.gridColumn.caption);
 		container.addItem(label);
 		return container;
 	}

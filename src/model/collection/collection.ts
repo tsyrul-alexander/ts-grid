@@ -2,6 +2,7 @@ import {Utilities} from "../../utilities";
 import {Event, IEvent} from "../event/event";
 import {BaseObject} from "../base-object";
 export interface ICollection<T> {
+	count: number;
 	add(item: T): void;
 	remove(item: T): void;
 	toArray(): T[];
@@ -9,6 +10,9 @@ export interface ICollection<T> {
 }
 
 export class Collection<T> extends BaseObject implements ICollection<T> {
+	public get count(): number {
+		return this.items.length;
+	}
 	public AddedItem: IEvent<ICollection<T>, T> = new Event<ICollection<T>, T>();
 	public RemoveItem: IEvent<ICollection<T>, T> = new Event<ICollection<T>, T>();
 	items: T[] = [];

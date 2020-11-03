@@ -8,7 +8,7 @@ export class OptionsBuilder extends BaseBuilder {
 	getControl(options: GridOptions): IControl {
 		let view = this.createView(options);
 		let container = new Container();
-		container.addClass("grid-container-columns");
+		container.addClass("grid-container-options");
 		container.addItem(view.getControl());
 		return container;
 	}

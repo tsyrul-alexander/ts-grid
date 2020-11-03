@@ -1,1 +1,2 @@
-export abstract class BaseBuilder {}
+export abstract class BaseBuilder {
+}

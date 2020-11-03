@@ -1,0 +1,51 @@
+$primary: #11998e;
+$secondary: #38ef7d;
+$white: #fff;
+$gray: #9b9b9b;
+$textFontFamily: inherit;
+$textColor: #000000;
+$select-color: #fff;
+$select-background: #7d7d7d;
+$select-separate-background: #c0392b;
+
+.hide-control {
+  visibility: hidden;
+}
+.base-input {
+  font-family: $textFontFamily;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid $gray;
+  outline: 0;
+  color: $textColor;
+  background: transparent;
+  transition: border-color 0.2s;
+  &::placeholder {
+    color: transparent;
+  }
+  &:focus {
+    border-image: linear-gradient(to right, $primary,$secondary);
+    border-image-slice: 1;
+  }
+  &:required,&:invalid { box-shadow:none; }
+}
+.select-control {
+  position: relative;
+  .select-items-container {
+    width: 100%;
+    background-color: darken($select-background, 5);
+    color: $select-color;
+    text-align: center;
+    position: absolute;
+    z-index: 1;
+    .select-item {
+      border-top: 1px solid darken($select-separate-background, 10);
+      padding: 5px 0;
+      &:hover {
+        border: 2px solid $gray;
+        color: $select-background;
+        background: $select-color;
+      }
+    }
+  }
+}

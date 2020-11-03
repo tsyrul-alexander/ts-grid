@@ -1,10 +1,11 @@
 import {Event, IEvent} from "../../../model/event/event";
-import {HTMLControl, IHtmlControl} from "../html-control";
+import {HTMLControl} from "../html-control";
 import {IValueControl} from "../value-control";
 import {ControlPrefix} from "../control";
 
-export class Label extends HTMLControl(HTMLLabelElement) implements IHtmlControl {
+export class Label extends HTMLControl(HTMLLabelElement) implements IValueControl {
 	public valueChanged: IEvent<IValueControl, any> = new Event<IValueControl, any>();
+	isReadOnly: boolean;
 	public static register(): void {
 		customElements.define(ControlPrefix + "-label", Label, {extends: "label"});
 	}
