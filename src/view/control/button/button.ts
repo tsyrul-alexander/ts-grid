@@ -16,6 +16,11 @@ export class Button extends HTMLControl(HTMLButtonElement) implements IControl {
 	public get caption(): string {
 		return this.textContent;
 	}
+
+	init(): void {
+		super.init();
+		this.addClass("button-control");
+	}
 	onButtonClick(this: any, ev: MouseEvent) {
 		this.clickEvent.fire(this, ev);
 	}

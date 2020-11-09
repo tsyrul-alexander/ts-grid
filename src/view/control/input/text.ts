@@ -10,6 +10,17 @@ export class Text extends BaseInput<string> {
 	protected initHTMLElementAttributes(): void {
 		this.type = "text";
 	}
+	connected() {
+		super.connected();
+		this.addEventListener('keyup', this.onKeyUpEvent);
+	}
+	disconnected() {
+		super.disconnected();
+		this.removeEventListener('keyup', this.onKeyUpEvent);
+	}
+	onKeyUpEvent() {
+		this.onValueChanged();
+	}
 	getValue(): string {
 		return this.value;
 	}

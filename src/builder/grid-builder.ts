@@ -38,6 +38,10 @@ export class GridBuilder extends BaseBuilder {
 		return this.rowBuilder.addRow(data);
 	}
 
+	public clear(): void {
+		this.rowBuilder.clear();
+	}
+
 	public render(containerElement: HTMLElement): void {
 		let container = new Container();
 		container.addClass("grid-container");

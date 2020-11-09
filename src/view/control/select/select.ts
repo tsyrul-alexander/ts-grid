@@ -5,9 +5,10 @@ import {ControlPrefix} from "../control";
 import {IListItem} from "../../../model/list-item";
 import {Container} from "../container/container";
 import {IListItemControl, SelectItem} from "./select-item";
-import {HTMLControl} from "../html-control";
+import {HTMLControl, IHtmlControl} from "../html-control";
 import {Text} from "../input/text";
 import {Button} from "../button/button";
+import {Svg} from "../display/svg";
 
 export class Select extends HTMLControl(HTMLDivElement) implements IValueControlT<IListItem> {
 	//#region Events
@@ -16,6 +17,7 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 
 	//region Private Properties
 	_itemsContainer: IItemsControl;
+	_displayContainer: IItemsControl;
 	_displayControl: IValueControlT<string>;
 	_currentSelectedItem: IListItem;
 	_searchBtn: Button;
@@ -24,10 +26,20 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 
 	//region Public Properties
 	public loadData: (control: Select) => Promise<any>;
+	public set isShowItems(value: boolean) {
+		this.setAttribute("showitems", String(value));
+	}
+	public get isShowItems(): boolean {
+		let strValue = this.getAttribute("showitems");
+		return strValue === "true";
+	}
 	public get searchText(): string {
 		return this._displayControl.getValue();
 	}
 	public set currentSelectedItem(value: IListItem) {
+		if (this._currentSelectedItem?.displayValue !== value.displayValue) {
+			this.updateDisplayValue();
+		}
 		if (this._currentSelectedItem === value) {
 			return;
 		}
@@ -50,7 +62,29 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 		}
 		this._searchBtn = new Button();
 		this._searchBtn.addClass("select-search-btn");
+		this._searchBtn.content = this.getSearchButtonControlContent();
 		return this._searchBtn;
+	}
+	protected getSearchButtonControlContent(): IHtmlControl {
+		let svgElement = new Svg();
+		svgElement.viewBoxWidth = 350;
+		svgElement.viewBoxHeight = 350;
+		svgElement.addPath("M48,161A112,112,0,1,1,160,273,112.12,112.12,0,0,1,48,161ZM374.62,330.38l-81.23-81.24" +
+			"A158.83,158.83,0,0,0,320,161C320,72.78,248.22,1,160,1S0,72.78,0,161,71.78,321,160,321a158.83,158.83," +
+			"0,0,0,88.14-26.61l81.24,81.23a32,32,0,0,0,45.24-45.24Z");
+		return svgElement;
+	}
+	protected getDisplayContainer(): IItemsControl {
+		if (this._displayContainer) {
+			return this._displayContainer;
+		}
+		this._displayContainer = new Container();
+		this._displayContainer.addClass("select-display-container");
+		let displayControl = this.getDisplayControl();
+		let searchBtn = this.getSearchButtonControl();
+		this._displayContainer.addItem(displayControl);
+		this._displayContainer.addItem(searchBtn);
+		return this._displayContainer;
 	}
 	protected getDisplayControl(): IValueControlT<string> {
 		if (this._displayControl) {
@@ -58,7 +92,7 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 		}
 		this._displayControl = new Text();
 		this._displayControl.setValue(this.currentSelectedItem?.displayValue || "");
-		this._displayControl.addClass("select-display-container");
+		this._displayControl.addClass("select-display-control");
 		return this._displayControl;
 	}
 	protected getItemsContainer(): IItemsControl {
@@ -66,7 +100,7 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 			return this._itemsContainer;
 		}
 		this._itemsContainer = new Container();
-		this._itemsContainer.isVisible = false;
+		this._itemsContainer.isVisible = this.isShowItems;
 		this._itemsContainer.addClass("select-items-container");
 		return this._itemsContainer;
 	}
@@ -84,38 +118,48 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 		let itemsContainer = this.getItemsContainer();
 		itemsContainer.addItem(control);
 	}
+	protected subscribeDisplayControlEvents(control: IValueControlT<string>) {
+		control.valueChanged.on(this.onDisplayValueChange, this);
+	}
+	protected unsubscribeDisplayControlEvents(control: IValueControlT<string>) {
+		control.valueChanged.on(this.onDisplayValueChange, this);
+	}
 	protected subscribeSelectItemEvents(control: IListItemControl): void {
 		control.selectedEvent.on(this.onItemSelected, this);
 	}
 	protected unsubscribeSelectItemEvents(control: IListItemControl): void {
 		control.selectedEvent.un(this.onItemSelected, this);
 	}
+	protected onDisplayValueChange(): void {
+		this.reloadItems();
+	}
 	protected onItemSelected(control: IListItemControl): void {
 		this.currentSelectedItem = control.getValue();
 	}
 	protected onSelectClick(): void {
 		if (!this.getIsShowItemsContainer()) {
-			this.loadItems(() => {
-				this.showItemsContainer();
-			})
+			this.reloadItems();
 		} else {
 			this.hideItemsContainer();
 		}
 	}
+	protected reloadItems() {
+		this.loadItems(() => {
+			this.showItemsContainer();
+		});
+	}
 	protected getIsShowItemsContainer(): boolean {
-		let itemsContainer = this.getItemsContainer();
-		return itemsContainer.isVisible;
+		return this.isShowItems;
 	}
 	protected showItemsContainer(): void {
 		let itemsContainer = this.getItemsContainer();
+		this.isShowItems = true;
 		itemsContainer.isVisible = true;
 	}
 	protected hideItemsContainer(): void {
 		let itemsContainer = this.getItemsContainer();
+		this.isShowItems = false;
 		itemsContainer.isVisible = false;
-	}
-	protected onDocumentClick(event): void {
-
 	}
 	protected updateDisplayValue(): void {
 		this._displayControl?.setValue(this.currentSelectedItem?.displayValue);
@@ -143,20 +187,26 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 		itemsContainer.clear();
 	}
 	public init() {
-		this.appendChild((this._displayControl = this.getDisplayControl()).getHTMLElement());
-		this.appendChild((this._itemsContainer = this.getItemsContainer()).getHTMLElement());
+		this.initChild();
 		//this.appendChild((this._searchBtn = this.getSearchButtonControl()));todo
 		this.addClass("select-control");
+		this.isShowItems = false;
+	}
+	public initChild() {
+		this.appendChild((this._displayContainer = this.getDisplayContainer()).getHTMLElement());
+		this.appendChild((this._itemsContainer = this.getItemsContainer()).getHTMLElement());
 	}
 	public connected() {
 		super.connected();
 		this.addEventListener('click', this.onSelectClick);
-		document.addEventListener('click', this.onDocumentClick);
+		let displayControl = this.getDisplayControl();
+		this.subscribeDisplayControlEvents(displayControl);
 	}
 	public disconnected() {
 		super.disconnected();
 		this.removeEventListener('click', this.onSelectClick);
-		document.removeEventListener('click', this.onDocumentClick);
+		let displayControl = this.getDisplayControl();
+		this.unsubscribeDisplayControlEvents(displayControl);
 	}
 	public getValue(): IListItem {
 		return this.currentSelectedItem;

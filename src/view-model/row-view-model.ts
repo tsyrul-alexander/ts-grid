@@ -6,7 +6,7 @@ import {IListItem} from "../model/list-item";
 export class RowViewModel extends BaseViewModel<RowModel> {
 	public propertyChanged: IEvent<RowViewModel, string> = new Event<RowViewModel, string>();
 	public static ListValuesPropertySuffix: string = "ListValues";
-	public static ListValuesMethodSuffix: string = "loadValues";
+	public static ListValuesMethodSuffix: string = "LoadValues";
 	get(propertyName: string): any {
 		return this.model.get(propertyName);
 	}
@@ -17,16 +17,25 @@ export class RowViewModel extends BaseViewModel<RowModel> {
 		this.model.set(propertyName, value);
 		this.onPropertyChanged(propertyName);
 	}
-	getLookupValues(columnName, searchText: string): Promise<IListItem[]> {
+	getLookupValues(columnName: string, searchText: string): Promise<IListItem[]> {
 		return new Promise<IListItem[]>((resolve, reject) => {
 			if (this[columnName + RowViewModel.ListValuesMethodSuffix]) {
 				//todo
 				reject("not implemented");
 			} else {
-				resolve(this.get(columnName + RowViewModel.ListValuesPropertySuffix));
+				let filterLookupValues = this.getLookupListValues(columnName, searchText);
+				resolve(filterLookupValues);
 			}
 		})
 	}
+
+	private getLookupListValues(columnName: string, searchText: string) {
+		let lookupValues = <IListItem[]>this.get(columnName + RowViewModel.ListValuesPropertySuffix);
+		return searchText && lookupValues.filter(lookupValue => {
+			return lookupValue.displayValue.includes(searchText);
+		}, this) || lookupValues;
+	}
+
 	onPropertyChanged(propertyName: string) {
 		this.propertyChanged.fire(this, propertyName);
 	}

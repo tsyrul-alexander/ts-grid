@@ -2,7 +2,7 @@ import {BaseView} from "./base-view";
 import {IControl} from "./control/control";
 import {GridColumn} from "../model/grid/grid-column";
 import {Container} from "./control/container/container";
-import {Label} from "./control/text/label";
+import {Label} from "./control/display/label";
 
 export class ColumnView extends BaseView {
 	constructor(public gridColumn: GridColumn) {

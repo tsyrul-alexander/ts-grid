@@ -6,14 +6,15 @@ import {ControlPrefix} from "../control";
 export class Label extends HTMLControl(HTMLLabelElement) implements IValueControl {
 	public valueChanged: IEvent<IValueControl, any> = new Event<IValueControl, any>();
 	isReadOnly: boolean;
-	public static register(): void {
-		customElements.define(ControlPrefix + "-label", Label, {extends: "label"});
-	}
+
 	getValue(): string {
 		return this.innerText;
 	}
 	setValue(value: string): void {
 		this.innerText = value;
+	}
+	public static register(): void {
+		customElements.define(ControlPrefix + "-label", Label, {extends: "label"});
 	}
 }
 

@@ -83,7 +83,7 @@ export class RowView extends BaseView {
 	protected createSelectControl(viewModel: RowViewModel, column: GridColumn): IValueControl {
 		let control = new Select();
 		this.setValueControlValues(control, viewModel, column);
-		control.loadData = this.loadSelectDate.bind(this, viewModel, column);
+		control.loadData = this.loadSelectData.bind(this, viewModel, column);
 		return control;
 	}
 	protected createIntegerControl(viewModel: RowViewModel, column: GridColumn): IValueControl {
@@ -91,14 +91,14 @@ export class RowView extends BaseView {
 		this.setValueControlValues(control, viewModel, column);
 		return control;
 	}
-	protected loadSelectDate(viewModel: RowViewModel, column: GridColumn, selectControl: Select): Promise<any> {
+	protected loadSelectData(viewModel: RowViewModel, column: GridColumn, selectControl: Select): Promise<any> {
 		return new Promise<any>((resolve, reject) => {
 			selectControl.clear();
 			viewModel.getLookupValues(column.columnName, selectControl.searchText).then(listItems => {
 				this.setListItemsToSelectControl(selectControl, listItems);
 				resolve();
 			}).catch(reject);
-		})
+		});
 	}
 	protected setListItemsToSelectControl(selectControl: Select, listItems: IListItem[]) {
 		selectControl.addItems(listItems);

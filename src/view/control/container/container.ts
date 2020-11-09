@@ -45,8 +45,6 @@ export class Container extends HTMLControl(HTMLDivElement) implements IItemsCont
 	public static register(): void {
 		customElements.define(ControlPrefix + "-container", Container, {extends: "div"});
 	}
-
-
 }
 
 Container.register();

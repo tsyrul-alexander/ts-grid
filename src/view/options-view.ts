@@ -6,7 +6,7 @@ import {IItemsControl} from "./control/items-control";
 import {Button} from "./control/button/button";
 import {IValueControl} from "./control/value-control";
 import {Text} from "./control/input/text";
-import {Label} from "./control/text/label";
+import {Label} from "./control/display/label";
 
 export class OptionsView extends BaseView {
 	mainControl: IItemsControl;
@@ -56,8 +56,8 @@ export class OptionsView extends BaseView {
 		this.pageRowsCountControl.setValue(this.getPageRowsCountText());
 	}
 	protected getPageRowsCountText() {
-		let startRow = this.options.pageRowCount * (this.options.pageIndex + 1);
-		let endRow = this.options.rowCount;
+		let startRow = this.options.pageIndex + 1;
+		let endRow = Math.ceil(this.options.rowCount / this.options.pageRowCount);
 		if (startRow > endRow) {
 			startRow = endRow;
 		}

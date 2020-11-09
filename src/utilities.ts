@@ -42,4 +42,14 @@ export class Utilities {
 			obj.destroy();
 		}
 	}
+	public static range<T>(array: T[], start: number, end: number): T[] {
+		let ans = [];
+		for (let i = start; i < end; i++) {
+			if (array.length <= i) {
+				break;
+			}
+			ans.push(array[i]);
+		}
+		return ans;
+	}
 }
