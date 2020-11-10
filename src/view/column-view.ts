@@ -11,6 +11,7 @@ export class ColumnView extends BaseView {
 	getControl(): IControl {
 		let container = new Container();
 		container.addClass("column-view");
+		container.setAttribute("column", this.gridColumn.weight.toString());
 		let label = new Label();
 		label.setValue(this.gridColumn.caption);
 		container.addItem(label);

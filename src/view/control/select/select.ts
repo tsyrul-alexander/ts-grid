@@ -27,11 +27,18 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 	//region Public Properties
 	public loadData: (control: Select) => Promise<any>;
 	public set isShowItems(value: boolean) {
+		if (this.isShowItems === value) {
+			return;
+		}
 		this.setAttribute("showitems", String(value));
+		this.onIsShowItemsChange();
 	}
 	public get isShowItems(): boolean {
 		let strValue = this.getAttribute("showitems");
 		return strValue === "true";
+	}
+	public set searchText(value: string) {
+		this._displayControl.setValue(value);
 	}
 	public get searchText(): string {
 		return this._displayControl.getValue();
@@ -52,6 +59,25 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 	//endregion
 
 	//region Protected Methods
+	protected onDisplayValueChange(): void {
+		this.reloadItems();
+	}
+	protected onItemSelected(control: IListItemControl): void {
+		this.currentSelectedItem = control.getValue();
+	}
+	protected onSelectClick(): void {
+		if (!this.getIsShowItemsContainer()) {
+			this.reloadItems();
+		} else {
+			this.hideItemsContainer();
+		}
+	}
+	protected onIsShowItemsChange() {
+		let isShowItems = this.isShowItems;
+		if (!isShowItems) {
+			this.updateDisplayValue();
+		}
+	}
 	protected onCurrentSelectedItemChanged() {
 		this.updateDisplayValue();
 		this.valueChanged.fire(this, this.getValue());
@@ -130,19 +156,6 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 	protected unsubscribeSelectItemEvents(control: IListItemControl): void {
 		control.selectedEvent.un(this.onItemSelected, this);
 	}
-	protected onDisplayValueChange(): void {
-		this.reloadItems();
-	}
-	protected onItemSelected(control: IListItemControl): void {
-		this.currentSelectedItem = control.getValue();
-	}
-	protected onSelectClick(): void {
-		if (!this.getIsShowItemsContainer()) {
-			this.reloadItems();
-		} else {
-			this.hideItemsContainer();
-		}
-	}
 	protected reloadItems() {
 		this.loadItems(() => {
 			this.showItemsContainer();
@@ -162,7 +175,7 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 		itemsContainer.isVisible = false;
 	}
 	protected updateDisplayValue(): void {
-		this._displayControl?.setValue(this.currentSelectedItem?.displayValue);
+		this._displayControl?.setValue(this.currentSelectedItem?.displayValue || "");
 	}
 	protected loadItems(callback: () => void = null) {
 		let promise = this.loadData(this);

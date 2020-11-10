@@ -53,7 +53,7 @@ $select-separate-background: #000000;
         height: 20px;
       }
     }
-    .select-display-control:focus > .select-search-btn {
+    .select-display-control:hover > .select-search-btn {
       opacity: 0.9;
     }
   }

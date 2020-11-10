@@ -11,7 +11,6 @@ export class RowBuilder extends BaseBuilder {
 	rowsViewModels: ICollection<RowViewModel> = new Collection();
 	constructor(public columns: ICollection<GridColumn>) {
 		super();
-		this.rowsView = new RowsView(this.columns);
 	}
 	createViewModel(data: object): RowViewModel {
 		let model = this.createModel(data);
@@ -23,11 +22,11 @@ export class RowBuilder extends BaseBuilder {
 		this.rowsViewModels.add(viewModel);
 		return viewModel;
 	}
-	getControl(columns: ICollection<GridColumn>): IControl {
+	getControl(): IControl {
 		if (this.rowsView) {
 			return this.rowsView.getControl();
 		}
-		this.rowsView = new RowsView(columns);
+		this.rowsView = new RowsView(this.columns);
 		return this.rowsView.getControl();
 	}
 	clear() {

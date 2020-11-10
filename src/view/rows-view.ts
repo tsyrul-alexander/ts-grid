@@ -9,13 +9,11 @@ import {IItemsControl} from "./control/items-control";
 
 export class RowsView extends BaseView {
 	protected mainContainer: Container;
-	protected views: RowView[] = [];
 	constructor(public columns: ICollection<GridColumn>) {
 		super();
 	}
 	addRow(viewModel: RowViewModel) {
 		let view = this.createRowView(viewModel);
-		this.views.push(view);
 		let container = this.getContainer();
 		container.addItem(view.getControl());
 		return view;
@@ -36,7 +34,6 @@ export class RowsView extends BaseView {
 		return this.mainContainer;
 	}
 	clear() {
-		this.views = [];
 		this.mainContainer.clear();
 	}
 }

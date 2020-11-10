@@ -12,7 +12,6 @@ export class GridBuilder extends BaseBuilder {
 	protected rowBuilder: RowBuilder;
 	protected columnBuilder: ColumnBuilder = new ColumnBuilder();
 	protected optionsBuilder: OptionsBuilder = new OptionsBuilder();
-	protected columns: ICollection<GridColumn> = new Collection<GridColumn>();
 
 	constructor(public options: GridOptions = null) {
 		super();
@@ -27,11 +26,11 @@ export class GridBuilder extends BaseBuilder {
 	}
 
 	protected createRowBuilder(): RowBuilder {
-		return new RowBuilder(this.columns);
+		return new RowBuilder(this.columnBuilder.getColumns());
 	}
 
 	public addColumn(column: GridColumn): void {
-		this.columns.add(column);
+		this.columnBuilder.addColumn(column);
 	}
 
 	public addRow(data: any): RowViewModel {
@@ -45,8 +44,8 @@ export class GridBuilder extends BaseBuilder {
 	public render(containerElement: HTMLElement): void {
 		let container = new Container();
 		container.addClass("grid-container");
-		container.addItem(this.columnBuilder.getControl(this.columns.toArray()));
-		container.addItem(this.rowBuilder.getControl(this.columns));
+		container.addItem(this.columnBuilder.getControl());
+		container.addItem(this.rowBuilder.getControl());
 		container.addItem(this.optionsBuilder.getControl(this.options || (this.options = this.getDefaultGridOptions())));
 		containerElement.appendChild(container.getHTMLElement());
 	}

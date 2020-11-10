@@ -1,20 +1,29 @@
 import {BaseBuilder} from "./base-builder";
 import {GridColumn} from "../model/grid/grid-column";
-import {Container} from "../view/control/container/container";
-import {ColumnView} from "../view/column-view";
 import {IControl} from "../view/control/control";
+import {ColumnsView} from "../view/columns-view";
+import {Collection, ICollection} from "../model/collection/collection";
 
 export class ColumnBuilder extends BaseBuilder {
-	getControl(gridColumns: GridColumn[]): IControl {
-		let container = new Container();
-		container.addClass("grid-container-columns");
-		gridColumns.forEach(gridColumn => {
-			let containerItem = container.addContainerItem(this.createView(gridColumn).getControl());
-			containerItem.setAttribute("column", gridColumn.weight.toString());
-		}, this);
-		return container;
+	columnsView: ColumnsView;
+	columns: ICollection<GridColumn> = new Collection();
+	addColumn(gridColumn: GridColumn) {
+		let columnsView = this.getColumnsView();
+		columnsView.addColumn(gridColumn);
+		this.columns.add(gridColumn);
 	}
-	createView(gridColumn: GridColumn): ColumnView {
-		return new ColumnView(gridColumn);
+	getControl(): IControl {
+		let columnView = this.getColumnsView();
+		return columnView.getControl();
+	}
+	getColumnsView(): ColumnsView {
+		if (this.columnsView) {
+			return this.columnsView;
+		}
+		let columnsView = new ColumnsView();
+		return this.columnsView = columnsView;
+	}
+	getColumns(): ICollection<GridColumn>  {
+		return this.columns;
 	}
 }
