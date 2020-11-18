@@ -51,7 +51,7 @@ export class RowView extends BaseView {
 	}
 	protected setColumnControl(container: IItemsControl, viewModel: RowViewModel, column: GridColumn): void {
 		let valueColumnControl = this.getValueColumnControl(viewModel, column);
-		valueColumnControl.tag = column.columnName.toLowerCase();
+		valueColumnControl.tag = column.columnName;
 		this.subscribeValueControlEvents(valueColumnControl);
 		container.addItem(this.getColumnContainerItemControl(valueColumnControl, column));
 		this.columnControls.push(valueColumnControl);
@@ -121,7 +121,7 @@ export class RowView extends BaseView {
 		return viewModel.get(columnName);
 	}
 	protected getColumnControl(columnName: string): IValueControl {
-		return Utilities.getItemByKey(this.columnControls, "tag", columnName.toLowerCase());
+		return Utilities.getItemByKey(this.columnControls, "tag", columnName);
 	}
 	destroy() {
 		this.unsubscribeViewModelEvents(this.viewModel);

@@ -8,13 +8,19 @@ import {RowView} from "./row-view";
 import {IItemsControl} from "./control/items-control";
 
 export class RowsView extends BaseView {
-	protected mainContainer: Container;
+	private _mainContainer: IItemsControl;
+	protected get mainContainer(): IItemsControl {
+		if (this._mainContainer) {
+			return this._mainContainer;
+		}
+		return this._mainContainer = this.createContainer();
+	}
 	constructor(public columns: ICollection<GridColumn>) {
 		super();
 	}
 	addRow(viewModel: RowViewModel) {
 		let view = this.createRowView(viewModel);
-		let container = this.getContainer();
+		let container = this.mainContainer;
 		container.addItem(view.getControl());
 		return view;
 	}
@@ -22,18 +28,17 @@ export class RowsView extends BaseView {
 		return new RowView(viewModel, this.columns);
 	}
 	getControl(): IControl {
-		let container = this.getContainer();
-		return container;
-	}
-	getContainer(): IItemsControl {
-		if (this.mainContainer) {
-			return this.mainContainer;
-		}
-		this.mainContainer = new Container();
-		this.mainContainer.addClass("grid-container-rows");
 		return this.mainContainer;
 	}
+	createContainer(): IItemsControl {
+		let container = new Container();
+		container.addClass("rows-view");
+		return container;
+	}
 	clear() {
+		if (!this._mainContainer) {
+			return;
+		}
 		this.mainContainer.clear();
 	}
 }

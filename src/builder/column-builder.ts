@@ -1,13 +1,18 @@
-import {BaseBuilder} from "./base-builder";
+import {BaseBuilder, IBuilder} from "./base-builder";
 import {GridColumn} from "../model/grid/grid-column";
 import {IControl} from "../view/control/control";
 import {ColumnsView} from "../view/columns-view";
 import {Collection, ICollection} from "../model/collection/collection";
 
-export class ColumnBuilder extends BaseBuilder {
+export interface IColumnBuilder extends IBuilder {
+	addColumn(gridColumn: GridColumn): void;
+	getColumns(): ICollection<GridColumn>;
+}
+
+export class ColumnBuilder extends BaseBuilder implements IColumnBuilder {
 	columnsView: ColumnsView;
 	columns: ICollection<GridColumn> = new Collection();
-	addColumn(gridColumn: GridColumn) {
+	addColumn(gridColumn: GridColumn): void {
 		let columnsView = this.getColumnsView();
 		columnsView.addColumn(gridColumn);
 		this.columns.add(gridColumn);

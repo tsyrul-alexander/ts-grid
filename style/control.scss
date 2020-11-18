@@ -8,71 +8,73 @@ $select-background: #707070f2;
 $select-separate-background: #000000;
 
 .hide-control {
-  visibility: hidden;
+	visibility: hidden;
 }
 .base-input {
-  font-family: $textFontFamily;
-  width: 100%;
-  border: 0;
-  border-bottom: 2px solid $gray;
-  outline: 0;
-  color: $textColor;
-  background: transparent;
-  transition: border-color 0.2s;
-  &::placeholder {
-    color: transparent;
-  }
-  &:focus {
-    border-image: linear-gradient(to right, $baseInputFocusPrimaryColor, $baseInputFocusSecondaryColor);
-    border-image-slice: 1;
-  }
-  &:required,&:invalid { box-shadow:none; }
+	font-family: $textFontFamily;
+	width: 100%;
+	border: 0;
+	border-bottom: 2px solid $gray;
+	outline: 0;
+	color: $textColor;
+	background: transparent;
+	transition: border-color 0.2s;
+	&::placeholder {
+		color: transparent;
+	}
+	&:focus {
+		border-image: linear-gradient(to right, $baseInputFocusPrimaryColor, $baseInputFocusSecondaryColor);
+		border-image-slice: 1;
+	}
+	&:required, &:invalid {
+		box-shadow: none;
+	}
 }
 .button-control {
-  background-color: Transparent;
-  background-repeat: no-repeat;
-  border: none;
-  cursor:pointer;
-  overflow: hidden;
-  outline:none;
+	background-color: Transparent;
+	background-repeat: no-repeat;
+	border: none;
+	cursor: pointer;
+	overflow: hidden;
+	outline: none;
 }
 .select-control {
-  position: relative;
-  .select-display-container {
-    display: flex;
-    flex-direction:row-reverse;
-    .select-display-control {
-      order: 2;
-      margin-right: -20px;
-    }
-    .select-search-btn {
-      padding: 0;
-      opacity: 0.1;
-      .svg-control {
-        width: 20px;
-        height: 20px;
-      }
-    }
-    .select-display-control:hover > .select-search-btn {
-      opacity: 0.9;
-    }
-  }
-  .select-items-container {
-    width: 100%;
-    font-family: $textFontFamily;
-    background-color: $select-background;
-    color: $select-color;
-    text-align: center;
-    position: absolute;
-    z-index: 1;
-    border: 2px solid $gray;
-    .select-item {
-      border-top: 1px solid $select-separate-background;
-      padding: 5px 0;
-      &:hover {
-        color: $select-background;
-        background: $select-color;
-      }
-    }
-  }
+	position: relative;
+	.select-display-container {
+		display: flex;
+		flex-direction: row-reverse;
+		.select-display-control {
+			order: 2;
+			margin-right: -20px;
+		}
+		.select-search-btn {
+			padding: 0;
+			opacity: 0.1;
+			.svg-control {
+				width: 20px;
+				height: 20px;
+			}
+		}
+		.select-display-control:hover > .select-search-btn {
+			opacity: 0.9;
+		}
+	}
+	.select-items-container {
+		width: 100%;
+		font-family: $textFontFamily;
+		background-color: $select-background;
+		color: $select-color;
+		text-align: center;
+		position: absolute;
+		z-index: 1;
+		border: 2px solid $gray;
+		.select-item {
+			border-top: 1px solid $select-separate-background;
+			padding: 5px 0;
+			&:hover {
+				color: $select-background;
+				background: $select-color;
+			}
+		}
+	}
 }

@@ -5,13 +5,11 @@ import {GridOptions} from "../model/grid/grid-options";
 import {IItemsControl} from "./control/items-control";
 import {Button} from "./control/button/button";
 import {IValueControl} from "./control/value-control";
-import {Text} from "./control/input/text";
 import {Label} from "./control/display/label";
 
 export class OptionsView extends BaseView {
-	mainControl: IItemsControl;
+	protected mainControl: IItemsControl;
 	protected pageRowsCountControl: IValueControl;
-	protected rowCountControl: IValueControl;
 	protected nextRowsButton: Button;
 	protected nextPreviousButton: Button;
 	constructor(public options: GridOptions) {

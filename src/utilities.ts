@@ -20,17 +20,19 @@ export class Utilities {
 		return items.filter(item => keys.every(key => searchObject.hasOwnProperty(key) &&
 				item[key] === searchObject[key]));
 	}
-	static removeFromObj<T>(items: T[], searchObject: any): void {
+	static removeFromObj<T>(items: T[], searchObject: any): T[] {
 		let findItems = Utilities.getItemsByObj<T>(items, searchObject);
 		findItems.forEach(item => {
-			Utilities.removeItem(items, item);
+			findItems = Utilities.removeItem(items, item);
 		}, this);
+		return findItems;
 	}
-	static removeItem(items: any[], value: any): void {
+	static removeItem(items: any[], value: any): any[] {
 		const index = items.indexOf(value);
 		if (index > -1) {
-			items.splice(index, 1);
+			return items.splice(index, 1);
 		}
+		return items;
 	}
 	static checkRequiredParameter(value: any, name: string): void {
 		if (!value) {

@@ -2,89 +2,84 @@ $container-column-percentage: 4%;
 $container-margin: 5px 5px 5px 5px;
 $container-row-margin: 5px 5px 5px 5px;
 $fontSize: 19px;
+
 .grid-container {
-  border: 1px double;
-  border-radius: 10px;
-  label, input {
-    font-size: $fontSize;
-  }
-  .grid-container-columns {
-    display: flex;
-    margin: $container-margin;
-    .column-view {
-      display: flex;
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      &:before,
-      &:after {
-        content: '';
-        border-top: 2px solid;
-        margin: 0 5px 0 5px;
-        flex: 1 0 20px;
-      }
-    }
-  }
-  .grid-container-rows {
-    margin: $container-row-margin;
-    .row-view {
-      display: flex;
-      .row-view-item {
-        margin: 5px;
-      }
-    }
-  }
-  .grid-container-options {
-    .options-view {
-      display: flex;
-      flex-direction: row-reverse;
-      .page-row-count-text{
-        font-size: 19px;
-      }
-      .next-button, .previous-button {
-        font-size: 15px;
-        margin: 0 3px 0 3px;
-        border-radius: 50%;
-        text-decoration: none;
-      }
-      .next-button:hover, .previous-button:hover {
-        background-color: #ddd;
-        color: black;
-      }
-      .previous-button {
-       /* background-color: #f1f1f1;
-        color: black;*/
-      }
-      .next-button {
-        /*background-color: #4CAF50;
-        color: white;*/
-      }
-    }
-  }
-  .container-item {
-    margin: 1px;
-  }
+	border: 1px double;
+	border-radius: 10px;
+	label, input {
+		font-size: $fontSize;
+	}
+	.columns-view {
+		display: flex;
+		margin: $container-margin;
+		.column-view {
+			display: flex;
+			width: 100%;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+			&:before,
+			&:after {
+				content: '';
+				border-top: 2px solid;
+				margin: 0 5px 0 5px;
+				flex: 1 0 20px;
+			}
+		}
+	}
+	.rows-view {
+		margin: $container-row-margin;
+		.row-view {
+			display: flex;
+			.row-view-item {
+				margin: 5px;
+			}
+		}
+	}
+	.options-view {
+		display: flex;
+		flex-direction: row-reverse;
+		.page-row-count-text {
+			font-size: 19px;
+		}
+		.next-button, .previous-button {
+			font-size: 15px;
+			margin: 0 3px 0 3px;
+			border-radius: 50%;
+			text-decoration: none;
+		}
+		.next-button:hover, .previous-button:hover {
+			background-color: #ddd;
+			color: black;
+		}
+		.previous-button {
+			/* background-color: #f1f1f1;
+			color: black;*/
+		}
+		.next-button {
+			/*background-color: #4CAF50;
+			color: white;*/
+		}
+	}
 }
 @media screen and (min-width: 800px) {
-  .grid-container {
-    .container {
-      [column="1"] {
-        flex: 1;
-      }
-      [column="2"] {
-        flex: 2;
-      }
-      [column="3"] {
-        flex: 3;
-      }
-      [column="4"] {
-        flex: 4;
-      }
-      [column="5"] {
-        flex: 5;
-      }
-    }
-  }
-
+	.grid-container {
+		.container {
+			[column="1"] {
+				flex: 1;
+			}
+			[column="2"] {
+				flex: 2;
+			}
+			[column="3"] {
+				flex: 3;
+			}
+			[column="4"] {
+				flex: 4;
+			}
+			[column="5"] {
+				flex: 5;
+			}
+		}
+	}
 }

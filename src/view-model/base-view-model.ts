@@ -3,8 +3,7 @@ import {BaseObject} from "../model/base-object";
 
 export class BaseViewModel<T extends BaseModel> extends BaseObject {
 	public model: T;
-	constructor(model: T) {
+	constructor() {
 		super();
-		this.model = model;
 	}
 }

@@ -1,4 +1,4 @@
-import {BaseBuilder} from "./base-builder";
+import {BaseBuilder, IBuilder} from "./base-builder";
 import {RowViewModel} from "../view-model/row-view-model";
 import {RowModel} from "../model/row-model";
 import {Collection, ICollection} from "../model/collection/collection";
@@ -6,34 +6,57 @@ import {GridColumn} from "../model/grid/grid-column";
 import {RowsView} from "../view/rows-view";
 import {IControl} from "../view/control/control";
 
-export class RowBuilder extends BaseBuilder {
-	rowsView: RowsView;
+export interface IRowBuilder extends IBuilder {
+	addRow(data: object): RowViewModel;
+	addRowViewModel<T extends RowViewModel>(data: any, type: (new () => T)): T;
+	getControl(): IControl;
+	clear(): void;
+}
+
+export class RowBuilder extends BaseBuilder implements IRowBuilder {
+	private _rowsView: RowsView;
+	protected get rowsView(): RowsView {
+		if (this._rowsView) {
+			return this._rowsView;
+		}
+		return this._rowsView = this.createRowsView();
+	}
 	rowsViewModels: ICollection<RowViewModel> = new Collection();
 	constructor(public columns: ICollection<GridColumn>) {
 		super();
 	}
-	createViewModel(data: object): RowViewModel {
+	public createViewModel<T extends RowViewModel>(data: object, type: (new () => T)): T {
 		let model = this.createModel(data);
-		return Object.create(new RowViewModel(model), this.getViewModelProperties(model));
+		let rowViewModel = new type();
+		rowViewModel.model = model;
+		return Object.create(rowViewModel, this.getViewModelProperties(model));
 	}
-	addRow(data: object): RowViewModel {
-		let viewModel = this.createViewModel(data);
+	public addRow(data: object): RowViewModel {
+		let viewModel = this.createViewModel(data, RowViewModel);
 		this.rowsView.addRow(viewModel);
 		this.rowsViewModels.add(viewModel);
 		return viewModel;
 	}
-	getControl(): IControl {
-		if (this.rowsView) {
-			return this.rowsView.getControl();
-		}
-		this.rowsView = new RowsView(this.columns);
+	public addRowViewModel<T extends RowViewModel>(data: any, type: (new () => T)): T {
+		let viewModel = this.createViewModel(data, type);
+		this.rowsView.addRow(viewModel);
+		this.rowsViewModels.add(viewModel);
+		return viewModel;
+	}
+	public getControl(): IControl {
 		return this.rowsView.getControl();
 	}
-	clear() {
+	protected createModel(data: object): RowModel {
+		return new RowModel(data);
+	}
+	protected createRowsView(): RowsView {
+		return new RowsView(this.columns);
+	}
+	public clear(): void {
 		this.rowsView.clear();
 		this.rowsViewModels.clear();
 	}
-	getViewModelProperties(model: RowModel) {
+	protected getViewModelProperties(model: RowModel) {
 		let properties = {};
 		let columns = model.getColumns();
 		columns.forEach(column => {
@@ -41,7 +64,7 @@ export class RowBuilder extends BaseBuilder {
 		}, this);
 		return properties;
 	}
-	setViewModelProperty(properties: object, model: RowModel, columnName: string) {
+	protected setViewModelProperty(properties: object, model: RowModel, columnName: string) {
 		properties[columnName] = {
 			get: function() {
 				return this.model.get(columnName);
@@ -50,8 +73,5 @@ export class RowBuilder extends BaseBuilder {
 				this.model.set(columnName, value);
 			}
 		};
-	}
-	createModel(data: object) {
-		return new RowModel(data);
 	}
 }

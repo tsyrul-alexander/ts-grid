@@ -21,7 +21,7 @@ export class ColumnsView extends BaseView {
 			return this._mainContainer;
 		}
 		let container = new Container();
-		container.addClass("grid-container-columns");
+		container.addClass("columns-view");
 		return this._mainContainer = container;
 	}
 	createColumnView(gridColumn: GridColumn): ColumnView {
