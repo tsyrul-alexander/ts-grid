@@ -72,4 +72,4 @@ contentBuilder.render(gridContainer);
 contentBuilder.loadGridData();
 ```
 result:
-<img src="grid.png" alt="app-image" width="957px" height="142px"/>
+<img src="grid.png" alt="app-image" width="820px" height="100px"/>
