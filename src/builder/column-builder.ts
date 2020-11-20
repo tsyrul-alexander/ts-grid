@@ -12,23 +12,33 @@ export interface IColumnBuilder extends IBuilder {
 export class ColumnBuilder extends BaseBuilder implements IColumnBuilder {
 	columnsView: ColumnsView;
 	columns: ICollection<GridColumn> = new Collection();
-	addColumn(gridColumn: GridColumn): void {
-		let columnsView = this.getColumnsView();
-		columnsView.addColumn(gridColumn);
+
+	protected createColumnsView(): ColumnsView {
+		return new ColumnsView(this.columns);
+	}
+	protected setColumnOrder(gridColumn: GridColumn) {
+		if (gridColumn.order === 0) {
+			gridColumn.order = this.columns.count + 1;
+		}
+	}
+	public init(): void {
+		super.init();
+		this.columnsView = this.createColumnsView();
+		this.columnsView.init();
+	}
+	public addColumn(gridColumn: GridColumn): void {
+		this.setColumnOrder(gridColumn);
+		this.columnsView.addColumn(gridColumn);
 		this.columns.add(gridColumn);
 	}
-	getControl(): IControl {
-		let columnView = this.getColumnsView();
-		return columnView.getControl();
+	public getControl(): IControl {
+		return this.columnsView.getControl();
 	}
-	getColumnsView(): ColumnsView {
-		if (this.columnsView) {
-			return this.columnsView;
-		}
-		let columnsView = new ColumnsView();
-		return this.columnsView = columnsView;
-	}
-	getColumns(): ICollection<GridColumn>  {
+	public getColumns(): ICollection<GridColumn>  {
 		return this.columns;
+	}
+	public destroy(): void {
+		super.destroy();
+		this.columnsView.destroy();
 	}
 }

@@ -20,6 +20,9 @@ export function HTMLControl <T extends HtmlElementConstructor>(base: T) {
 				this.addClass(this.hideCssClassName);
 			}
 		}
+		public setStyle(property: string, value: string | null): void {
+			this.style.setProperty(property, value);
+		}
 		public addClass(className: string): void {
 			this.classList.add(className);
 		}

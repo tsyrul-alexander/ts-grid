@@ -14,6 +14,10 @@ export class OptionsView extends BaseView {
 	protected nextPreviousButton: Button;
 	constructor(public options: GridOptions) {
 		super();
+	}
+
+	protected subscribe(): void {
+		super.subscribe();
 		this.options.navigationValueChanged.on(this.onNavigationValueChanged, this);
 	}
 	protected createMainControl(): IItemsControl {
@@ -73,16 +77,16 @@ export class OptionsView extends BaseView {
 		}
 		this.options.pageIndex++;
 	}
+	protected unsubscribe(): void {
+		super.destroy();
+		this.nextRowsButton.clickEvent.un(this.onNextRowsClick, this);
+		this.options.navigationValueChanged.un(this.onNavigationValueChanged, this);
+	}
 	public getControl(): IControl {
 		if (this.mainControl) {
 			return this.mainControl;
 		}
 		this.mainControl = this.createMainControl();
 		return this.mainControl;
-	}
-	destroy(): void {
-		super.destroy();
-		this.nextRowsButton.clickEvent.un(this.onNextRowsClick, this);
-		this.options.navigationValueChanged.un(this.onNavigationValueChanged, this);
 	}
 }

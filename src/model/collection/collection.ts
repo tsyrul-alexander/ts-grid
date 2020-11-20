@@ -2,40 +2,47 @@ import {Utilities} from "../../utilities";
 import {Event, IEvent} from "../event/event";
 import {BaseObject} from "../base-object";
 export interface ICollection<T> {
+	addedItem: IEvent<ICollection<T>, T>;
+	removedItem: IEvent<ICollection<T>, T>;
 	count: number;
 	add(item: T): void;
 	remove(item: T): void;
 	toArray(): T[];
 	clear();
+	each(callbackfn: (value: T, index: number) => void, thisArg?: any): void;
 }
 
 export class Collection<T> extends BaseObject implements ICollection<T> {
 	public get count(): number {
 		return this.items.length;
 	}
-	public AddedItem: IEvent<ICollection<T>, T> = new Event<ICollection<T>, T>();
-	public RemoveItem: IEvent<ICollection<T>, T> = new Event<ICollection<T>, T>();
+	public addedItem: IEvent<ICollection<T>, T> = new Event<ICollection<T>, T>();
+	public removedItem: IEvent<ICollection<T>, T> = new Event<ICollection<T>, T>();
 	items: T[] = [];
 	constructor() {
 		super();
 	}
-	add(item: T): void {
-		this.items.push(item);
-		this.AddedItem.fire(this, item);
+
+	public each(callbackfn: (value: T, index: number) => void, thisArg?: any): void {
+		this.items.forEach(callbackfn, thisArg);
 	}
-	addRange(items: T[]): void {
+	public add(item: T): void {
+		this.items.push(item);
+		this.addedItem.fire(this, item);
+	}
+	public addRange(items: T[]): void {
 		items.forEach(item => {
 			this.add(item);
 		}, this);
 	}
-	remove(item: T): void {
+	public remove(item: T): void {
 		Utilities.removeItem(this.items, item);
-		this.RemoveItem.fire(this, item);
+		this.removedItem.fire(this, item);
 	}
-	toArray(): T[] {
+	public toArray(): T[] {
 		return this.items;
 	}
-	clear() {
+	public clear(): void {
 		this.items.forEach(item => {
 			this.remove(item);
 		}, this);

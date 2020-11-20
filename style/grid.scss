@@ -9,6 +9,16 @@ $fontSize: 19px;
 	label, input {
 		font-size: $fontSize;
 	}
+	.next-button, .previous-button {
+		font-size: 15px;
+		margin: 0 3px 0 3px;
+		border-radius: 50%;
+		text-decoration: none;
+	}
+	.next-button:hover, .previous-button:hover {
+		background-color: #ddd;
+		color: black;
+	}
 	.columns-view {
 		display: flex;
 		margin: $container-margin;
@@ -41,24 +51,6 @@ $fontSize: 19px;
 		flex-direction: row-reverse;
 		.page-row-count-text {
 			font-size: 19px;
-		}
-		.next-button, .previous-button {
-			font-size: 15px;
-			margin: 0 3px 0 3px;
-			border-radius: 50%;
-			text-decoration: none;
-		}
-		.next-button:hover, .previous-button:hover {
-			background-color: #ddd;
-			color: black;
-		}
-		.previous-button {
-			/* background-color: #f1f1f1;
-			color: black;*/
-		}
-		.next-button {
-			/*background-color: #4CAF50;
-			color: white;*/
 		}
 	}
 }

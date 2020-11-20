@@ -9,21 +9,21 @@ export interface IOptionBuilder extends IBuilder {
 }
 
 export class OptionsBuilder extends BaseBuilder implements IOptionBuilder {
-	private _options: GridOptions;
-	public get options(): GridOptions {
-		return this._options;
-	}
-	public set options(value: GridOptions) {
-		this._options = value;
-	}
-	getControl(): IControl {
-		let view = this.createView(this.options);
-		let container = new Container();
-		container.addClass("grid-container-options");
-		container.addItem(view.getControl());
-		return container;
-	}
-	createView(options: GridOptions): OptionsView {
+	protected optionsView: OptionsView;
+	public options: GridOptions;
+
+	protected createView(options: GridOptions): OptionsView {
 		return new OptionsView(options);
+	}
+	public init(): void {
+		super.init();
+		this.optionsView = this.createView(this.options);
+	}
+	public getControl(): IControl {
+		return this.optionsView.getControl();
+	}
+	public destroy(): void {
+		super.destroy();
+		this.optionsView.destroy();
 	}
 }

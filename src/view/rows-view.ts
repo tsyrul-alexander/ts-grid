@@ -8,37 +8,39 @@ import {RowView} from "./row-view";
 import {IItemsControl} from "./control/items-control";
 
 export class RowsView extends BaseView {
-	private _mainContainer: IItemsControl;
-	protected get mainContainer(): IItemsControl {
-		if (this._mainContainer) {
-			return this._mainContainer;
-		}
-		return this._mainContainer = this.createContainer();
-	}
+	protected mainContainer: IItemsControl;
+	protected views: RowView[] = [];
 	constructor(public columns: ICollection<GridColumn>) {
 		super();
 	}
-	addRow(viewModel: RowViewModel) {
-		let view = this.createRowView(viewModel);
-		let container = this.mainContainer;
-		container.addItem(view.getControl());
-		return view;
+
+	protected createControl() {
+		super.createControl();
+		this.mainContainer = this.createMainContainer();
 	}
-	createRowView(viewModel: RowViewModel): RowView {
+	protected createRowView(viewModel: RowViewModel): RowView {
 		return new RowView(viewModel, this.columns);
 	}
-	getControl(): IControl {
-		return this.mainContainer;
-	}
-	createContainer(): IItemsControl {
+	protected createMainContainer(): IItemsControl {
 		let container = new Container();
 		container.addClass("rows-view");
 		return container;
 	}
-	clear() {
-		if (!this._mainContainer) {
-			return;
-		}
+	public addRow(viewModel: RowViewModel): void {
+		let view = this.createRowView(viewModel);
+		view.init();
+		this.views.push(view);
+		this.mainContainer.addItem(view.getControl());
+	}
+	public getControl(): IControl {
+		return this.mainContainer;
+	}
+	public clear() {
 		this.mainContainer.clear();
+		this.views.forEach(view => view.destroy());
+	}
+	public destroy(): void {
+		super.destroy();
+		this.clear();
 	}
 }

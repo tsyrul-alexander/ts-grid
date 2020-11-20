@@ -82,6 +82,7 @@ export abstract class GridContentBuilder {
 	//region Public Methods
 	public init(): void {
 		this.subscribeGridOptionsEvent(this.options);
+		this.gridBuilder.init();
 	}
 	public createGridOptions(): GridOptions {
 		let options = new GridOptions();
@@ -110,6 +111,7 @@ export abstract class GridContentBuilder {
 	}
 	public destroy(): void {
 		this.unsubscribeGridOptionsEvent(this.options);
+		this.gridBuilder.destroy();
 	}
 	//endregion
 }
