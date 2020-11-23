@@ -5,9 +5,11 @@ export class GridOptions {
 	public rowCountChanged: IEvent<GridOptions, number> = new Event<GridOptions, number>();
 	public pageRowCountChanged: IEvent<GridOptions, number> = new Event<GridOptions, number>();
 	public pageIndexChanged: IEvent<GridOptions, number> = new Event<GridOptions, number>();
+	public isLoadChanged: IEvent<GridOptions, boolean> = new Event<GridOptions, boolean>();
 	private _rowCount: number = 0;
 	private _pageRowCount: number = 10;
 	private _pageIndex: number = 0;
+	private _isLoad: boolean = false;
 
 	public get rowCount(): number {
 		return this._rowCount;
@@ -42,7 +44,18 @@ export class GridOptions {
 		this.pageIndexChanged.fire(this, value);
 		this.onNavigationValueChanged();
 	}
-	onNavigationValueChanged() {
+	public get isLoad(): boolean {
+		return this._isLoad;
+	}
+	public set isLoad(value: boolean) {
+		if (this._isLoad === value) {
+			return;
+		}
+		this._isLoad = value;
+		this.isLoadChanged.fire(this, value);
+	}
+
+	protected onNavigationValueChanged() {
 		this.navigationValueChanged.fire(this);
 	}
 }

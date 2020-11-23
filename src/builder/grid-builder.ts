@@ -48,7 +48,7 @@ export class GridBuilder extends BaseBuilder implements IGridBuilder {
 		builder.options = this.options;
 		return builder;
 	}
-	protected createRowBuilder(): RowBuilder {
+	protected createRowBuilder(): IRowBuilder {
 		return new RowBuilder(this.columnBuilder.getColumns());
 	}
 	public addColumn(column: GridColumn): void {

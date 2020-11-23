@@ -4,14 +4,16 @@ import {Container} from "./control/container/container";
 import {GridOptions} from "../model/grid/grid-options";
 import {IItemsControl} from "./control/items-control";
 import {Button} from "./control/button/button";
-import {IValueControl} from "./control/value-control";
+import {IValueControl, IValueControlT} from "./control/value-control";
 import {Label} from "./control/display/label";
 
 export class OptionsView extends BaseView {
+	protected isLoadAttributeName: string = "load";
 	protected mainControl: IItemsControl;
 	protected pageRowsCountControl: IValueControl;
 	protected nextRowsButton: Button;
-	protected nextPreviousButton: Button;
+	protected previousRowsButton: Button;
+	protected loadControl: IControl;
 	constructor(public options: GridOptions) {
 		super();
 	}
@@ -19,13 +21,39 @@ export class OptionsView extends BaseView {
 	protected subscribe(): void {
 		super.subscribe();
 		this.options.navigationValueChanged.on(this.onNavigationValueChanged, this);
+		this.options.isLoadChanged.on(this.onIsLoadChanged, this);
 	}
 	protected createMainControl(): IItemsControl {
 		let container = new Container();
 		container.addClass("options-view");
-		container.addItem(this.nextRowsButton = this.getNextRowsButton());
+		container.addItem(this.createLeftContainer());
+		container.addItem(this.createCenterContainer());
+		container.addItem(this.createRightContainer());
+		return container;
+	}
+	protected createLeftContainer(): IItemsControl {
+		let container = new Container();
+		container.addClass("options-view-left-container");
+		container.addItem(this.loadControl = this.createLoadControl());
+		return container;
+	}
+	protected createCenterContainer(): IItemsControl {
+		let container = new Container();
+		container.addClass("options-view-center-container");
+		return container;
+	}
+	protected createRightContainer(): IItemsControl {
+		let container = new Container();
+		container.addClass("options-view-right-container");
+		container.addItem(this.previousRowsButton = this.getPreviousRowsButton());
 		container.addItem(this.pageRowsCountControl = this.getPageRowsCountLabel());
-		container.addItem(this.nextPreviousButton = this.getPreviousRowsButton());
+		container.addItem(this.nextRowsButton = this.getNextRowsButton());
+		return container
+	}
+	protected createLoadControl(): IItemsControl {
+		let container = new Container();
+		container.addClass("options-load-control");
+		this.setIsLoadToControl(container);
 		return container;
 	}
 	protected getNextRowsButton(): Button {
@@ -45,17 +73,26 @@ export class OptionsView extends BaseView {
 	protected getPageRowsCountLabel(): IValueControl {
 		let control = new Label();
 		control.addClass("page-row-count-text");
-		control.setValue(this.getPageRowsCountText());
+		this.setPageRowsCountToControl(control);
 		return control;
 	}
-	protected onNavigationValueChanged() {
-		this.updatePageRowsCountControl();
+	protected onNavigationValueChanged(): void {
+		this.setPageRowsCountToControl(this.pageRowsCountControl);
 	}
-	protected updatePageRowsCountControl(): void {
-		if (!this.pageRowsCountControl) {
+	protected onIsLoadChanged(): void {
+		this.setIsLoadToControl(this.loadControl);
+	}
+	protected setIsLoadToControl(control: IControl): void {
+		if (!control) {
 			return;
 		}
-		this.pageRowsCountControl.setValue(this.getPageRowsCountText());
+		control.setAttribute(this.isLoadAttributeName, String(this.options.isLoad));
+	}
+	protected setPageRowsCountToControl(control: IValueControlT<string>): void {
+		if (!control) {
+			return;
+		}
+		control.setValue(this.getPageRowsCountText());
 	}
 	protected getPageRowsCountText() {
 		let startRow = this.options.pageIndex + 1;
@@ -78,9 +115,11 @@ export class OptionsView extends BaseView {
 		this.options.pageIndex++;
 	}
 	protected unsubscribe(): void {
-		super.destroy();
+		super.unsubscribe();
 		this.nextRowsButton.clickEvent.un(this.onNextRowsClick, this);
+		this.previousRowsButton.clickEvent.un(this.onPreviousRowsClick, this);
 		this.options.navigationValueChanged.un(this.onNavigationValueChanged, this);
+		this.options.isLoadChanged.un(this.onIsLoadChanged, this);
 	}
 	public getControl(): IControl {
 		if (this.mainControl) {

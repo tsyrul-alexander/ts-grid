@@ -63,14 +63,23 @@ export abstract class GridContentBuilder {
 		this.reloadData();
 	}
 	protected loadGridData() {
+		this.beforeLoadGridData();
 		let loadDataPromise = this.loadData();
-		loadDataPromise.then(this.onLoadGridDataSuccess)
-			.catch(this.onLoadGridDataError)
-			.finally(this.onLoadGridDataFinally);
+		loadDataPromise.then(this.onLoadGridDataSuccess.bind(this))
+			.catch(this.onLoadGridDataError.bind(this))
+			.finally(this.onLoadGridDataFinally.bind(this));
 	}
 	protected onLoadGridDataSuccess() {}
 	protected onLoadGridDataError() {}
-	protected onLoadGridDataFinally() {}
+	protected onLoadGridDataFinally() {
+		this.alterLoadGridData();
+	}
+	protected beforeLoadGridData() {
+		this.options.isLoad = true;
+	}
+	protected alterLoadGridData() {
+		this.options.isLoad = false;
+	}
 	protected subscribeGridOptionsEvent(options: GridOptions) {
 		options.navigationValueChanged.on(this.onNavigationValueChanged, this);
 	}

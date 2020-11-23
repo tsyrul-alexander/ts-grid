@@ -18,6 +18,7 @@ export class OptionsBuilder extends BaseBuilder implements IOptionBuilder {
 	public init(): void {
 		super.init();
 		this.optionsView = this.createView(this.options);
+		this.optionsView.init();
 	}
 	public getControl(): IControl {
 		return this.optionsView.getControl();
