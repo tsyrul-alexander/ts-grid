@@ -3,21 +3,22 @@ import {IControl} from "../view/control/control";
 import {OptionsView} from "../view/options-view";
 import {GridOptions} from "../model/grid/grid-options";
 import {Container} from "../view/control/container/container";
+import {Grid} from "../model/grid/grid";
 
-export interface IOptionBuilder extends IBuilder {
-	options: GridOptions;
-}
+export interface IOptionBuilder extends IBuilder { }
 
 export class OptionsBuilder extends BaseBuilder implements IOptionBuilder {
 	protected optionsView: OptionsView;
-	public options: GridOptions;
 
+	constructor(public grid: Grid) {
+		super();
+	}
 	protected createView(options: GridOptions): OptionsView {
 		return new OptionsView(options);
 	}
 	public init(): void {
 		super.init();
-		this.optionsView = this.createView(this.options);
+		this.optionsView = this.createView(this.grid.options);
 		this.optionsView.init();
 	}
 	public getControl(): IControl {

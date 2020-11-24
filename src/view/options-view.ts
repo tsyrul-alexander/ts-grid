@@ -81,6 +81,15 @@ export class OptionsView extends BaseView {
 	}
 	protected onIsLoadChanged(): void {
 		this.setIsLoadToControl(this.loadControl);
+		this.setControlReadOnlyStatus(this.options.isLoad);
+	}
+	protected setControlReadOnlyStatus(isReadOnly: boolean): void {
+		if (this.nextRowsButton) {
+			this.nextRowsButton.isReadOnly = isReadOnly;
+		}
+		if (this.previousRowsButton) {
+			this.previousRowsButton.isReadOnly = isReadOnly;
+		}
 	}
 	protected setIsLoadToControl(control: IControl): void {
 		if (!control) {

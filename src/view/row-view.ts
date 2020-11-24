@@ -13,10 +13,12 @@ import {Text} from "./control/input/text";
 import {Utilities} from "../utilities";
 import {Select} from "./control/select/select";
 import {IListItem} from "../model/list-item";
+import {Event, IEvent} from "../model/event/event";
 
 export class RowView extends BaseView {
 	protected mainContainer: IItemsControl;
 	protected columnControls: IValueControl[] = [];
+	public click: IEvent<RowView, any> = new Event();
 
 	constructor(public viewModel: RowViewModel, public columns: ICollection<GridColumn>) {
 		super();
@@ -70,6 +72,7 @@ export class RowView extends BaseView {
 	protected createMainContainer(): IItemsControl {
 		let container = new Container();
 		container.addClass("row-view");
+		container.clickEvent.on(this.onMainContainerClick, this);
 		return container;
 	}
 	protected setColumnControl(container: IItemsControl, viewModel: RowViewModel, column: GridColumn): void {
@@ -135,6 +138,9 @@ export class RowView extends BaseView {
 	}
 	protected setIsReadOnlyToValueControl(valueControl: IValueControl, column: GridColumn) {
 		valueControl.isReadOnly = column.isReadOnly;
+	}
+	protected onMainContainerClick() {
+		this.click.fire(this, null);
 	}
 	protected onViewModelValueChanged(viewModel: RowViewModel, columnName: string) {
 		let value = this.getViewModelColumnValue(viewModel, columnName);

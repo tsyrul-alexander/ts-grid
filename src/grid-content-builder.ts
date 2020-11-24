@@ -2,6 +2,7 @@ import {GridBuilder, IGridBuilder} from "./builder/grid-builder";
 import {GridOptions} from "./model/grid/grid-options";
 import {RowViewModel} from "./view-model/row-view-model";
 import {GridColumn} from "./model/grid/grid-column";
+import {Grid} from "./model/grid/grid";
 
 export abstract class GridContentBuilder {
 	//region Private Properties
@@ -10,12 +11,7 @@ export abstract class GridContentBuilder {
 	//endregion
 
 	//region Public Properties only get
-	public get gridBuilder(): IGridBuilder {
-		if (this._gridBuilder) {
-			return this._gridBuilder;
-		}
-		return this._gridBuilder = this.createGridBuilder();
-	}
+	public gridBuilder: IGridBuilder;
 	public get options(): GridOptions {
 		if (this._option) {
 			return this._option;
@@ -27,6 +23,9 @@ export abstract class GridContentBuilder {
 	}
 	public get endRow(): number {
 		return this.startRow + this.pageRowCount;
+	}
+	public get grid(): Grid {
+		return this.gridBuilder.grid;
 	}
 	//endregion
 
@@ -55,9 +54,7 @@ export abstract class GridContentBuilder {
 
 	//region Protected Methods
 	protected createGridBuilder(): IGridBuilder {
-		let builder = new GridBuilder();
-		builder.options = this.options;
-		return builder;
+		return new GridBuilder(this.options);
 	}
 	protected onNavigationValueChanged() {
 		this.reloadData();
@@ -74,24 +71,28 @@ export abstract class GridContentBuilder {
 	protected onLoadGridDataFinally() {
 		this.alterLoadGridData();
 	}
+	protected onActiveRowChanged(grid: Grid, rowViewModel: RowViewModel): void {}
 	protected beforeLoadGridData() {
 		this.options.isLoad = true;
 	}
 	protected alterLoadGridData() {
 		this.options.isLoad = false;
 	}
-	protected subscribeGridOptionsEvent(options: GridOptions) {
-		options.navigationValueChanged.on(this.onNavigationValueChanged, this);
+	protected subscribeGridEvent(grid: Grid) {
+		grid.options.navigationValueChanged.on(this.onNavigationValueChanged, this);
+		grid.activeRowChanged.on(this.onActiveRowChanged, this);
 	}
-	protected unsubscribeGridOptionsEvent(options: GridOptions) {
-		options.navigationValueChanged.on(this.onNavigationValueChanged, this);
+	protected unsubscribeGridEvent(grid: Grid) {
+		grid.options.navigationValueChanged.un(this.onNavigationValueChanged, this);
+		grid.activeRowChanged.un(this.onActiveRowChanged, this);
 	}
 	//endregion
 
 	//region Public Methods
 	public init(): void {
-		this.subscribeGridOptionsEvent(this.options);
+		this.gridBuilder = this.createGridBuilder();
 		this.gridBuilder.init();
+		this.subscribeGridEvent(this.gridBuilder.grid);
 	}
 	public createGridOptions(): GridOptions {
 		let options = new GridOptions();
@@ -119,7 +120,7 @@ export abstract class GridContentBuilder {
 		this.gridBuilder.addColumn(column);
 	}
 	public destroy(): void {
-		this.unsubscribeGridOptionsEvent(this.options);
+		this.unsubscribeGridEvent(this.gridBuilder.grid);
 		this.gridBuilder.destroy();
 	}
 	//endregion

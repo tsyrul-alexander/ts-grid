@@ -4,6 +4,12 @@ import {Event, IEvent} from "../../../model/event/event";
 
 export class Button extends HTMLControl(HTMLButtonElement) implements IControl {
 	public clickEvent: IEvent<Button, any> = new Event<Button, any>();
+	public get isReadOnly(){
+		return this.disabled;
+	}
+	public set isReadOnly(value: boolean){
+		this.disabled = value;
+	}
 	public set content(control: IHtmlControl) {
 		this.appendChild(control);
 	}

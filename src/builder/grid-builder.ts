@@ -7,8 +7,10 @@ import {ColumnBuilder, IColumnBuilder} from "./column-builder";
 import {GridOptions} from "../model/grid/grid-options";
 import {IOptionBuilder, OptionsBuilder} from "./options-builder";
 import { IControl } from "src/view/control/control";
+import {Grid} from "../model/grid/grid";
 
 export interface IGridBuilder extends IBuilder {
+	grid: Grid;
 	addColumn(column: GridColumn): void;
 	addRow(data: any): RowViewModel;
 	addRowViewModel<T extends RowViewModel>(data: any, type: (new () => T)): T;
@@ -20,9 +22,10 @@ export class GridBuilder extends BaseBuilder implements IGridBuilder {
 	protected optionsBuilder: IOptionBuilder;
 	protected columnBuilder: IColumnBuilder;
 	protected rowBuilder: IRowBuilder;
-
+	public grid: Grid = new Grid();
 	constructor(public options: GridOptions = null) {
 		super();
+		this.grid.options = options;
 	}
 
 	public init(): void {
@@ -41,15 +44,13 @@ export class GridBuilder extends BaseBuilder implements IGridBuilder {
 		this.optionsBuilder.init();
 	}
 	protected createColumnBuilder(): IColumnBuilder {
-		return new ColumnBuilder();
+		return new ColumnBuilder(this.grid);
 	}
 	protected createOptionBuilder(): IOptionBuilder {
-		let builder = new OptionsBuilder();
-		builder.options = this.options;
-		return builder;
+		return  new OptionsBuilder(this.grid);
 	}
 	protected createRowBuilder(): IRowBuilder {
-		return new RowBuilder(this.columnBuilder.getColumns());
+		return new RowBuilder(this.grid);
 	}
 	public addColumn(column: GridColumn): void {
 		this.columnBuilder.addColumn(column);

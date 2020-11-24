@@ -1,10 +1,9 @@
 import {BaseBuilder, IBuilder} from "./base-builder";
 import {RowViewModel} from "../view-model/row-view-model";
 import {RowModel} from "../model/row-model";
-import {Collection, ICollection} from "../model/collection/collection";
-import {GridColumn} from "../model/grid/grid-column";
 import {RowsView} from "../view/rows-view";
 import {IControl} from "../view/control/control";
+import {Grid} from "../model/grid/grid";
 
 export interface IRowBuilder extends IBuilder {
 	addRow(data: object): RowViewModel;
@@ -15,13 +14,12 @@ export interface IRowBuilder extends IBuilder {
 
 export class RowBuilder extends BaseBuilder implements IRowBuilder {
 	protected rowsView: RowsView;
-	rowsViewModels: ICollection<RowViewModel> = new Collection();
-	constructor(public columns: ICollection<GridColumn>) {
+	constructor(public grid: Grid) {
 		super();
 	}
 
 	protected createRowsView(): RowsView {
-		return new RowsView(this.columns);
+		return new RowsView(this.grid);
 	}
 	protected createModel(data: object): RowModel {
 		return new RowModel(data);
@@ -50,6 +48,10 @@ export class RowBuilder extends BaseBuilder implements IRowBuilder {
 		rowViewModel.model = model;
 		return Object.create(rowViewModel, this.getViewModelProperties(model));
 	}
+	protected addRowViewModelToGrid(viewModel: RowViewModel): void {
+		this.rowsView.addRow(viewModel);
+		this.grid.rows.add(viewModel);
+	}
 	public init(): void {
 		super.init();
 		this.rowsView = this.createRowsView();
@@ -57,14 +59,12 @@ export class RowBuilder extends BaseBuilder implements IRowBuilder {
 	}
 	public addRow(data: object): RowViewModel {
 		let viewModel = this.createViewModel(data, RowViewModel);
-		this.rowsView.addRow(viewModel);
-		this.rowsViewModels.add(viewModel);
+		this.addRowViewModelToGrid(viewModel);
 		return viewModel;
 	}
 	public addRowViewModel<T extends RowViewModel>(data: any, type: (new () => T)): T {
 		let viewModel = this.createViewModel(data, type);
-		this.rowsView.addRow(viewModel);
-		this.rowsViewModels.add(viewModel);
+		this.addRowViewModelToGrid(viewModel);
 		return viewModel;
 	}
 	public getControl(): IControl {
@@ -72,7 +72,7 @@ export class RowBuilder extends BaseBuilder implements IRowBuilder {
 	}
 	public clear(): void {
 		this.rowsView.destroy();
-		this.rowsViewModels.clear();
+		this.grid.rows.clear();
 	}
 	public destroy(): void {
 		super.destroy();

@@ -3,22 +3,24 @@ import {GridColumn} from "../model/grid/grid-column";
 import {IControl} from "../view/control/control";
 import {ColumnsView} from "../view/columns-view";
 import {Collection, ICollection} from "../model/collection/collection";
+import {Grid} from "../model/grid/grid";
 
 export interface IColumnBuilder extends IBuilder {
 	addColumn(gridColumn: GridColumn): void;
-	getColumns(): ICollection<GridColumn>;
 }
 
 export class ColumnBuilder extends BaseBuilder implements IColumnBuilder {
 	columnsView: ColumnsView;
-	columns: ICollection<GridColumn> = new Collection();
 
+	constructor(protected grid: Grid) {
+		super();
+	}
 	protected createColumnsView(): ColumnsView {
-		return new ColumnsView(this.columns);
+		return new ColumnsView(this.grid.columns);
 	}
 	protected setColumnOrder(gridColumn: GridColumn) {
 		if (gridColumn.order === 0) {
-			gridColumn.order = this.columns.count + 1;
+			gridColumn.order = this.grid.columns.count + 1;
 		}
 	}
 	public init(): void {
@@ -29,13 +31,10 @@ export class ColumnBuilder extends BaseBuilder implements IColumnBuilder {
 	public addColumn(gridColumn: GridColumn): void {
 		this.setColumnOrder(gridColumn);
 		this.columnsView.addColumn(gridColumn);
-		this.columns.add(gridColumn);
+		this.grid.columns.add(gridColumn);
 	}
 	public getControl(): IControl {
 		return this.columnsView.getControl();
-	}
-	public getColumns(): ICollection<GridColumn>  {
-		return this.columns;
 	}
 	public destroy(): void {
 		super.destroy();
