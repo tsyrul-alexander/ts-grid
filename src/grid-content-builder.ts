@@ -49,7 +49,6 @@ export abstract class GridContentBuilder {
 	public set pageIndex(value: number) {
 		this.options.pageIndex = value;
 	}
-
 	//endregion
 
 	//region Protected Methods
@@ -67,7 +66,9 @@ export abstract class GridContentBuilder {
 			.finally(this.onLoadGridDataFinally.bind(this));
 	}
 	protected onLoadGridDataSuccess() {}
-	protected onLoadGridDataError() {}
+	protected onLoadGridDataError(reason: any | null) {
+		this.setErrorText(reason);
+	}
 	protected onLoadGridDataFinally() {
 		this.alterLoadGridData();
 	}
@@ -85,6 +86,12 @@ export abstract class GridContentBuilder {
 	protected unsubscribeGridEvent(grid: Grid) {
 		grid.options.navigationValueChanged.un(this.onNavigationValueChanged, this);
 		grid.activeRowChanged.un(this.onActiveRowChanged, this);
+	}
+	protected setErrorText(reason: any | null): void {
+		this.options.errorMessage = reason.toString() || this.getDefaultErrorMessage();
+	}
+	protected getDefaultErrorMessage(): string {
+		return "error";
 	}
 	//endregion
 

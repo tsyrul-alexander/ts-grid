@@ -69,6 +69,13 @@ $fontSize: 19px;
 		}
 		.options-view-center-container {
 			flex: 1;
+			.options-error-message {
+				color: red;
+				margin: 0 5px 0 5px;
+				&.empty-value {
+					display: none;
+				}
+			}
 		}
 		.options-view-right-container {
 			width: auto;

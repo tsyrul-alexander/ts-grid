@@ -9,11 +9,13 @@ import {Label} from "./control/display/label";
 
 export class OptionsView extends BaseView {
 	protected isLoadAttributeName: string = "load";
+	protected emptyValueClassName: string = "empty-value";
 	protected mainControl: IItemsControl;
-	protected pageRowsCountControl: IValueControl;
+	protected pageRowsCountControl: IValueControlT<string>;
 	protected nextRowsButton: Button;
 	protected previousRowsButton: Button;
 	protected loadControl: IControl;
+	protected errorMessageControl: IValueControlT<string>;
 	constructor(public options: GridOptions) {
 		super();
 	}
@@ -22,6 +24,7 @@ export class OptionsView extends BaseView {
 		super.subscribe();
 		this.options.navigationValueChanged.on(this.onNavigationValueChanged, this);
 		this.options.isLoadChanged.on(this.onIsLoadChanged, this);
+		this.options.errorMessageChanged.on(this.onErrorMessageChanged, this);
 	}
 	protected createMainControl(): IItemsControl {
 		let container = new Container();
@@ -40,6 +43,7 @@ export class OptionsView extends BaseView {
 	protected createCenterContainer(): IItemsControl {
 		let container = new Container();
 		container.addClass("options-view-center-container");
+		container.addItem(this.errorMessageControl = this.getPageErrorMessageLabel());
 		return container;
 	}
 	protected createRightContainer(): IItemsControl {
@@ -76,12 +80,21 @@ export class OptionsView extends BaseView {
 		this.setPageRowsCountToControl(control);
 		return control;
 	}
+	protected getPageErrorMessageLabel(): IValueControl {
+		let control = new Label();
+		control.addClass("options-error-message");
+		this.setErrorMessageToControl(control);
+		return control;
+	}
 	protected onNavigationValueChanged(): void {
 		this.setPageRowsCountToControl(this.pageRowsCountControl);
 	}
 	protected onIsLoadChanged(): void {
 		this.setIsLoadToControl(this.loadControl);
 		this.setControlReadOnlyStatus(this.options.isLoad);
+	}
+	protected onErrorMessageChanged(): void {
+		this.setErrorMessageToControl(this.errorMessageControl);
 	}
 	protected setControlReadOnlyStatus(isReadOnly: boolean): void {
 		if (this.nextRowsButton) {
@@ -102,6 +115,17 @@ export class OptionsView extends BaseView {
 			return;
 		}
 		control.setValue(this.getPageRowsCountText());
+	}
+	protected setErrorMessageToControl(control: IValueControlT<string>): void {
+		if (!control) {
+			return;
+		}
+		if (this.options.errorMessage) {
+			control.removeClass(this.emptyValueClassName);
+		} else {
+			control.addClass(this.emptyValueClassName);
+		}
+		control.setValue(this.options.errorMessage);
 	}
 	protected getPageRowsCountText() {
 		let startRow = this.options.pageIndex + 1;

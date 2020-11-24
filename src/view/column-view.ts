@@ -93,7 +93,7 @@ export class ColumnView extends BaseView {
 	protected setNegativeDelta(delta: number) {
 		let currentOrder = this.gridColumn.order;
 		let newOrder = currentOrder + delta;
-		if (newOrder <= 1) {
+		if (newOrder < 1) {
 			return;
 		}
 		this.columns.each(column => {

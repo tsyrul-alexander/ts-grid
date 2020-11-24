@@ -26,6 +26,9 @@ export function HTMLControl <T extends HtmlElementConstructor>(base: T) {
 		public addClass(className: string): void {
 			this.classList.add(className);
 		}
+		public removeClass(className: string): void {
+			this.classList.remove(className);
+		}
 		public getHTMLElement(): HTMLElement {
 			return this;
 		}

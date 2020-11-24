@@ -6,10 +6,12 @@ export class GridOptions {
 	public pageRowCountChanged: IEvent<GridOptions, number> = new Event<GridOptions, number>();
 	public pageIndexChanged: IEvent<GridOptions, number> = new Event<GridOptions, number>();
 	public isLoadChanged: IEvent<GridOptions, boolean> = new Event<GridOptions, boolean>();
+	public errorMessageChanged: IEvent<GridOptions, string> = new Event<GridOptions, string>();
 	private _rowCount: number = 0;
 	private _pageRowCount: number = 10;
 	private _pageIndex: number = 0;
 	private _isLoad: boolean = false;
+	private _errorMessage: string = null;
 
 	public get rowCount(): number {
 		return this._rowCount;
@@ -54,7 +56,13 @@ export class GridOptions {
 		this._isLoad = value;
 		this.isLoadChanged.fire(this, value);
 	}
-
+	public get errorMessage(): string {
+		return this._errorMessage;
+	}
+	public set errorMessage(value: string) {
+		this._errorMessage = value;
+		this.errorMessageChanged.fire(this, value);
+	}
 	protected onNavigationValueChanged() {
 		this.navigationValueChanged.fire(this);
 	}
