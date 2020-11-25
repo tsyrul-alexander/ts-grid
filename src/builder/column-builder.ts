@@ -16,7 +16,7 @@ export class ColumnBuilder extends BaseBuilder implements IColumnBuilder {
 		super();
 	}
 	protected createColumnsView(): ColumnsView {
-		return new ColumnsView(this.grid.columns);
+		return new ColumnsView(this.grid);
 	}
 	protected setColumnOrder(gridColumn: GridColumn) {
 		if (gridColumn.order === 0) {

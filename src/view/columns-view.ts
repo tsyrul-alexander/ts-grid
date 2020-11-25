@@ -4,12 +4,12 @@ import {IControl} from "./control/control";
 import {Container} from "./control/container/container";
 import {ColumnView} from "./column-view";
 import {IItemsControl} from "./control/items-control";
-import {ICollection} from "../model/collection/collection";
+import {Grid} from "../model/grid/grid";
 
 export class ColumnsView extends BaseView {
 	protected mainContainer: IItemsControl;
 
-	constructor(public columns: ICollection<GridColumn>) {
+	constructor(public grid: Grid) {
 		super();
 	}
 	protected createControl() {
@@ -22,7 +22,7 @@ export class ColumnsView extends BaseView {
 		return container;
 	}
 	protected createColumnView(gridColumn: GridColumn): ColumnView {
-		return new ColumnView(this.columns, gridColumn);
+		return new ColumnView(this.grid, gridColumn);
 	}
 	public getControl(): IControl {
 		return this.mainContainer;

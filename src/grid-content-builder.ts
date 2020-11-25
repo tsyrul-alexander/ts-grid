@@ -3,6 +3,7 @@ import {GridOptions} from "./model/grid/grid-options";
 import {RowViewModel} from "./view-model/row-view-model";
 import {GridColumn} from "./model/grid/grid-column";
 import {Grid} from "./model/grid/grid";
+import {GridColumnSortDirection} from "./model/grid/grid-column-sort-direction";
 
 export abstract class GridContentBuilder {
 	//region Private Properties
@@ -26,6 +27,12 @@ export abstract class GridContentBuilder {
 	}
 	public get grid(): Grid {
 		return this.gridBuilder.grid;
+	}
+	public get sortColumn(): GridColumn {
+		return this.options.sortColumn;
+	}
+	public get sortDirection(): GridColumnSortDirection {
+		return this.options.sortDirection;
 	}
 	//endregion
 
@@ -55,6 +62,12 @@ export abstract class GridContentBuilder {
 	protected createGridBuilder(): IGridBuilder {
 		return new GridBuilder(this.options);
 	}
+	protected onSortDirectionChanged() {
+		this.reloadData();
+	}
+	protected onSortColumnChanged() {
+		this.reloadData();
+	}
 	protected onNavigationValueChanged() {
 		this.reloadData();
 	}
@@ -81,10 +94,14 @@ export abstract class GridContentBuilder {
 	}
 	protected subscribeGridEvent(grid: Grid) {
 		grid.options.navigationValueChanged.on(this.onNavigationValueChanged, this);
+		grid.options.sortColumnChanged.on(this.onSortColumnChanged, this);
+		grid.options.sortDirectionChanged.on(this.onSortDirectionChanged, this);
 		grid.activeRowChanged.on(this.onActiveRowChanged, this);
 	}
 	protected unsubscribeGridEvent(grid: Grid) {
 		grid.options.navigationValueChanged.un(this.onNavigationValueChanged, this);
+		grid.options.sortColumnChanged.un(this.onSortColumnChanged, this);
+		grid.options.sortDirectionChanged.un(this.onSortDirectionChanged, this);
 		grid.activeRowChanged.un(this.onActiveRowChanged, this);
 	}
 	protected setErrorText(reason: any | null): void {

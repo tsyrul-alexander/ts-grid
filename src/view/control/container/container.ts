@@ -1,19 +1,14 @@
 import {ControlPrefix, IControl} from "../control";
 import {HTMLControl} from "../html-control";
 import {IItemsControl} from "../items-control";
-import {Event, IEvent} from "../../../model/event/event";
 
 export class Container extends HTMLControl(HTMLDivElement) implements IItemsControl, HTMLDivElement {
-	public clickEvent: IEvent<Container, MouseEvent> = new Event();
 	constructor() {
 		super();
 		this.initHTMLElementClasses();
 	}
 	protected initHTMLElementClasses(): void {
 		this.addClass("container");
-	}
-	protected onClick(event: MouseEvent): void {
-		this.clickEvent.fire(this, event);
 	}
 	public addItem(control: IControl): IControl {
 		this.appendChild(control.getHTMLElement());
@@ -36,14 +31,6 @@ export class Container extends HTMLControl(HTMLDivElement) implements IItemsCont
 			controls.push(<IControl><any>childItem);
 		}
 		return controls;
-	}
-	public connected() {
-		super.connected();
-		this.addEventListener("click", this.onClick);
-	}
-	public disconnected(): void {
-		super.disconnected();
-		this.removeEventListener("click", this.onClick);
 	}
 
 	public static register(): void {

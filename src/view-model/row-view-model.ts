@@ -20,8 +20,7 @@ export class RowViewModel extends BaseViewModel<RowModel> {
 	getLookupValues(columnName: string, searchText: string): Promise<IListItem[]> {
 		return new Promise<IListItem[]>((resolve, reject) => {
 			if (this[columnName + RowViewModel.ListValuesMethodSuffix]) {
-				//todo
-				reject("not implemented");
+				this[columnName + RowViewModel.ListValuesMethodSuffix].apply(this, resolve, reject);
 			} else {
 				let filterLookupValues = this.getLookupListValues(columnName, searchText);
 				resolve(filterLookupValues);

@@ -10,6 +10,7 @@ export interface ICollection<T> {
 	toArray(): T[];
 	clear();
 	each(callbackfn: (value: T, index: number) => void, thisArg?: any): void;
+	getByIndex(index: number): T | null;
 }
 
 export class Collection<T> extends BaseObject implements ICollection<T> {
@@ -46,5 +47,8 @@ export class Collection<T> extends BaseObject implements ICollection<T> {
 		this.items.forEach(item => {
 			this.remove(item);
 		}, this);
+	}
+	public getByIndex(index: number): T | null {
+		return this.items[index] || null;
 	}
 }

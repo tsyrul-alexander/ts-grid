@@ -35,6 +35,18 @@ $fontSize: 19px;
 				margin: 0 5px 0 5px;
 				flex: 1 0 20px;
 			}
+			&[order-direction="1"] > .order-label {
+				transform: rotate(-90deg);
+				display: block;
+			}
+			&[order-direction="2"] > .order-label {
+				transform: rotate(90deg);
+				display: block;
+			}
+			.order-label {
+				margin: 0 0 -2px 8px;
+				display: none;
+			}
 		}
 	}
 	.rows-view {

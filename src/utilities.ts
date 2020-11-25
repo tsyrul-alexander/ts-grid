@@ -54,4 +54,15 @@ export class Utilities {
 		}
 		return ans;
 	}
+	public static sortByPropertyName<T>(array: T[], propertyName: string): T[] {
+		if (!propertyName) {
+			return array;
+		}
+		return array.sort((a, b) =>
+			a[propertyName] > b[propertyName] ? 1 : (b[propertyName] > a[propertyName] ? -1 : 0));
+	}
+	public static sortDescByPropertyName<T>(array: T[], propertyName: string): T[] {
+		return this.sortByPropertyName(array, propertyName).reverse();
+	}
 }
+

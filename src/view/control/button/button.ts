@@ -1,13 +1,11 @@
 import {HTMLControl, IHtmlControl} from "../html-control";
 import {ControlPrefix, IControl} from "../control";
-import {Event, IEvent} from "../../../model/event/event";
 
 export class Button extends HTMLControl(HTMLButtonElement) implements IControl {
-	public clickEvent: IEvent<Button, any> = new Event<Button, any>();
-	public get isReadOnly(){
+	public get isReadOnly() {
 		return this.disabled;
 	}
-	public set isReadOnly(value: boolean){
+	public set isReadOnly(value: boolean) {
 		this.disabled = value;
 	}
 	public set content(control: IHtmlControl) {
@@ -26,17 +24,6 @@ export class Button extends HTMLControl(HTMLButtonElement) implements IControl {
 	init(): void {
 		super.init();
 		this.addClass("button-control");
-	}
-	onButtonClick(this: any, ev: MouseEvent) {
-		this.clickEvent.fire(this, ev);
-	}
-	connected() {
-		super.connected();
-		this.addEventListener("click", this.onButtonClick);
-	}
-	disconnected() {
-		super.disconnected();
-		this.removeEventListener("click", this.onButtonClick);
 	}
 	public static register(): void {
 		customElements.define(ControlPrefix + "-button", Button, {extends: "button"});

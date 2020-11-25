@@ -19,15 +19,17 @@ $select-separate-background: #000000;
 	color: $textColor;
 	background: transparent;
 	transition: border-color 0.2s;
-	&::placeholder {
-		color: transparent;
-	}
 	&:focus {
-		border-image: linear-gradient(to right, $baseInputFocusPrimaryColor, $baseInputFocusSecondaryColor);
-		border-image-slice: 1;
+		border-image: linear-gradient(to right, $baseInputFocusPrimaryColor, $baseInputFocusSecondaryColor) 1;
 	}
 	&:required, &:invalid {
 		box-shadow: none;
+	}
+	&::placeholder {
+		color: transparent;
+	}
+	&:read-only {
+		opacity: 0.9;
 	}
 }
 .button-control {
@@ -43,6 +45,9 @@ $select-separate-background: #000000;
 	.select-display-container {
 		display: flex;
 		flex-direction: row-reverse;
+		&:hover > .select-search-btn {
+			opacity: 0.5;
+		}
 		.select-display-control {
 			order: 2;
 			margin-right: -20px;
@@ -54,9 +59,6 @@ $select-separate-background: #000000;
 				width: 20px;
 				height: 20px;
 			}
-		}
-		.select-display-control:hover > .select-search-btn {
-			opacity: 0.9;
 		}
 	}
 	.select-items-container {

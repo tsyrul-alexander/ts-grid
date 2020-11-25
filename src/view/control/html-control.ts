@@ -1,12 +1,14 @@
 import {IControl} from "./control";
+import {Event, IEvent} from "../../model/event/event";
 
-export interface IHtmlControl extends IControl, HTMLElement {
-
-}
 export type HtmlElementConstructor<T = {}> = new (...args: any[]) => HTMLElement;
 
+export interface IHtmlControl extends IControl, HTMLElement {}
+
+
 export function HTMLControl <T extends HtmlElementConstructor>(base: T) {
-	return class extends base {
+	return class extends base implements IHtmlControl {
+		public clickEvent: IEvent<IControl, MouseEvent> = new Event();
 		public _isInit: boolean = false;
 		public tag: string;
 		public hideCssClassName: string = "hide-control";
@@ -32,11 +34,16 @@ export function HTMLControl <T extends HtmlElementConstructor>(base: T) {
 		public getHTMLElement(): HTMLElement {
 			return this;
 		}
-		init(): void {
-
+		init(): void {}
+		public connected(): void {
+			this.addEventListener("click", this.onClick);
 		}
-		public connected(): void {}
-		public disconnected(): void {}
+		public disconnected(): void {
+			this.removeEventListener("click", this.onClick);
+		}
+		public onClick(event: MouseEvent): void {
+			this.clickEvent.fire(this, event);
+		}
 		connectedCallback() {
 			if (!this.isConnected) {
 				return;

@@ -14,6 +14,7 @@ import {Utilities} from "../utilities";
 import {Select} from "./control/select/select";
 import {IListItem} from "../model/list-item";
 import {Event, IEvent} from "../model/event/event";
+import {Float} from "./control/input/float";
 
 export class RowView extends BaseView {
 	protected mainContainer: IItemsControl;
@@ -98,6 +99,9 @@ export class RowView extends BaseView {
 		if (column.type === GridColumnType.integer) {
 			return this.createIntegerControl(viewModel, column);
 		}
+		if (column.type === GridColumnType.float) {
+			return this.createFloatControl(viewModel, column);
+		}
 		if (column.type === GridColumnType.list) {
 			return this.createSelectControl(viewModel, column);
 		}
@@ -112,6 +116,11 @@ export class RowView extends BaseView {
 		let control = new Select();
 		this.setValueControlValues(control, viewModel, column);
 		control.loadData = this.loadSelectData.bind(this, viewModel, column);
+		return control;
+	}
+	protected createFloatControl(viewModel: RowViewModel, column: GridColumn): IValueControl {
+		let control = new Float();
+		this.setValueControlValues(control, viewModel, column);
 		return control;
 	}
 	protected createIntegerControl(viewModel: RowViewModel, column: GridColumn): IValueControl {

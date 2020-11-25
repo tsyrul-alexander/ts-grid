@@ -1,4 +1,6 @@
 import {Event, IEvent} from "../event/event";
+import {GridColumn} from "./grid-column";
+import {GridColumnSortDirection} from "./grid-column-sort-direction";
 
 export class GridOptions {
 	public navigationValueChanged: IEvent<GridOptions, any> = new Event<GridOptions, any>();
@@ -7,11 +9,15 @@ export class GridOptions {
 	public pageIndexChanged: IEvent<GridOptions, number> = new Event<GridOptions, number>();
 	public isLoadChanged: IEvent<GridOptions, boolean> = new Event<GridOptions, boolean>();
 	public errorMessageChanged: IEvent<GridOptions, string> = new Event<GridOptions, string>();
+	public sortColumnChanged: IEvent<GridOptions, GridColumn> = new Event<GridOptions, GridColumn>();
+	public sortDirectionChanged: IEvent<GridOptions, GridColumnSortDirection> = new Event<GridOptions, GridColumnSortDirection>();
 	private _rowCount: number = 0;
 	private _pageRowCount: number = 10;
 	private _pageIndex: number = 0;
 	private _isLoad: boolean = false;
 	private _errorMessage: string = null;
+	private _sortColumn: GridColumn = null;
+	private _sortDirection: GridColumnSortDirection = null;
 
 	public get rowCount(): number {
 		return this._rowCount;
@@ -63,7 +69,32 @@ export class GridOptions {
 		this._errorMessage = value;
 		this.errorMessageChanged.fire(this, value);
 	}
+	public get sortColumn(): GridColumn {
+		return this._sortColumn;
+	}
+	public set sortColumn(value: GridColumn) {
+		if (this._sortColumn === value) {
+			return;
+		}
+		this._sortColumn = value;
+		this._sortDirection = this.getDefaultOrderDirection();
+		this.sortColumnChanged.fire(this, value);
+	}
+	public get sortDirection(): GridColumnSortDirection {
+		return this._sortDirection || this.getDefaultOrderDirection();
+	}
+	public set sortDirection(value: GridColumnSortDirection) {
+		if (this._sortDirection === value) {
+			return;
+		}
+		this._sortDirection = value;
+		this.sortDirectionChanged.fire(this, value);
+	}
+
 	protected onNavigationValueChanged() {
 		this.navigationValueChanged.fire(this);
+	}
+	protected getDefaultOrderDirection(): GridColumnSortDirection {
+		return GridColumnSortDirection.ASC;
 	}
 }
