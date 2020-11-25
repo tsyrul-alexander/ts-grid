@@ -1,7 +1,7 @@
 import {HTMLControl, IHtmlControl} from "../html-control";
 import {ControlPrefix, IControl} from "../control";
 
-export class Button extends HTMLControl(HTMLButtonElement) implements IControl {
+export class ButtonControl extends HTMLControl(HTMLButtonElement) implements IControl {
 	public get isReadOnly() {
 		return this.disabled;
 	}
@@ -26,8 +26,8 @@ export class Button extends HTMLControl(HTMLButtonElement) implements IControl {
 		this.addClass("button-control");
 	}
 	public static register(): void {
-		customElements.define(ControlPrefix + "-button", Button, {extends: "button"});
+		customElements.define(ControlPrefix + "-button", ButtonControl, {extends: "button"});
 	}
 }
 
-Button.register();
+ButtonControl.register();

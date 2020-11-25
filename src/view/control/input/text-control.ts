@@ -1,7 +1,7 @@
-import {BaseInput} from "./base-input";
+import {BaseInputControl} from "./base-input-control";
 import {ControlPrefix} from "../control";
 
-export class Text extends BaseInput<string> {
+export class TextControl extends BaseInputControl<string> {
 	constructor() {
 		super();
 		this.initHTMLElementAttributes();
@@ -10,23 +10,23 @@ export class Text extends BaseInput<string> {
 	protected initHTMLElementAttributes(): void {
 		this.type = "text";
 	}
-	connected() {
+	public connected() {
 		super.connected();
 		this.addEventListener('keyup', this.onKeyUpEvent);
 	}
-	disconnected() {
+	public disconnected() {
 		super.disconnected();
 		this.removeEventListener('keyup', this.onKeyUpEvent);
 	}
-	onKeyUpEvent() {
+	public onKeyUpEvent() {
 		this.onValueChanged();
 	}
-	getValue(): string {
+	public getValue(): string {
 		return this.value;
 	}
 	public static register(): void {
-		customElements.define(ControlPrefix + "-text", Text, {extends: "input"});
+		customElements.define(ControlPrefix + "-text", TextControl, {extends: "input"});
 	}
 }
 
-Text.register();
+TextControl.register();

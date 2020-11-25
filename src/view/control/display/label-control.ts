@@ -3,19 +3,19 @@ import {HTMLControl} from "../html-control";
 import {IValueControl} from "../value-control";
 import {ControlPrefix} from "../control";
 
-export class Label extends HTMLControl(HTMLLabelElement) implements IValueControl {
+export class LabelControl extends HTMLControl(HTMLLabelElement) implements IValueControl {
 	public valueChanged: IEvent<IValueControl, any> = new Event<IValueControl, any>();
-	isReadOnly: boolean;
+	public isReadOnly: boolean;
 
-	getValue(): string {
+	public getValue(): string {
 		return this.innerText;
 	}
-	setValue(value: string): void {
+	public setValue(value: string): void {
 		this.innerText = value;
 	}
 	public static register(): void {
-		customElements.define(ControlPrefix + "-label", Label, {extends: "label"});
+		customElements.define(ControlPrefix + "-label", LabelControl, {extends: "label"});
 	}
 }
 
-Label.register();
+LabelControl.register();

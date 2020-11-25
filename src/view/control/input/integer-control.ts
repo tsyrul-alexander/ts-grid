@@ -1,7 +1,7 @@
-import {BaseInput} from "./base-input";
+import {BaseInputControl} from "./base-input-control";
 import {ControlPrefix} from "../control";
 
-export class Integer extends BaseInput<number> {
+export class IntegerControl extends BaseInputControl<number> {
 	constructor() {
 		super();
 		this.initHTMLElementAttributes();
@@ -12,11 +12,10 @@ export class Integer extends BaseInput<number> {
 		this.pattern = "\\d*";
 	}
 	public static register(): void {
-		customElements.define(ControlPrefix + "-integer", Integer, {extends: "input"});
+		customElements.define(ControlPrefix + "-integer", IntegerControl, {extends: "input"});
 	}
-
-	getValue(): number {
+	public getValue(): number {
 		return Number.parseInt(this.value);
 	}
 }
-Integer.register();
+IntegerControl.register();

@@ -2,7 +2,6 @@ import {BaseBuilder, IBuilder} from "./base-builder";
 import {IControl} from "../view/control/control";
 import {OptionsView} from "../view/options-view";
 import {GridOptions} from "../model/grid/grid-options";
-import {Container} from "../view/control/container/container";
 import {Grid} from "../model/grid/grid";
 
 export interface IOptionBuilder extends IBuilder { }

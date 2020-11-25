@@ -2,7 +2,7 @@ import {Event, IEvent} from "../../../model/event/event";
 import {HTMLControl} from "../html-control";
 import {IValueControl, IValueControlT} from "../value-control";
 
-export abstract class BaseInput<T> extends HTMLControl(HTMLInputElement) implements IValueControlT<T> {
+export abstract class BaseInputControl<T> extends HTMLControl(HTMLInputElement) implements IValueControlT<T> {
 	public valueChanged: IEvent<IValueControl, any> = new Event<IValueControl, any>();
 	protected oldValue: any;
 	public get isReadOnly(){

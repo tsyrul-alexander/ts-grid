@@ -1,16 +1,16 @@
-import {IValueControl, IValueControlT} from "../value-control";
+import {IValueControlT} from "../value-control";
 import {IItemsControl} from "../items-control";
 import {Event, IEvent} from "../../../model/event/event";
 import {ControlPrefix} from "../control";
 import {IListItem} from "../../../model/list-item";
-import {Container} from "../container/container";
-import {IListItemControl, SelectItem} from "./select-item";
+import {ContainerControl} from "../container/container-control";
+import {IListItemControl, SelectItemControl} from "./select-item-control";
 import {HTMLControl, IHtmlControl} from "../html-control";
-import {Text} from "../input/text";
-import {Button} from "../button/button";
-import {Svg} from "../display/svg";
+import {TextControl} from "../input/text-control";
+import {ButtonControl} from "../button/button-control";
+import {SvgControl} from "../display/svg-control";
 
-export class Select extends HTMLControl(HTMLDivElement) implements IValueControlT<IListItem> {
+export class SelectControl extends HTMLControl(HTMLDivElement) implements IValueControlT<IListItem> {
 	//#region Events
 	valueChanged: IEvent<IValueControlT<IListItem>, IListItem> = new Event<IValueControlT<IListItem>, IListItem>();
 	//#endregion
@@ -20,12 +20,12 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 	_displayContainer: IItemsControl;
 	_displayControl: IValueControlT<string>;
 	_currentSelectedItem: IListItem;
-	_searchBtn: Button;
+	_searchBtn: ButtonControl;
 	isReadOnly: boolean;
 	//endregion'
 
 	//region Public Properties
-	public loadData: (control: Select) => Promise<any>;
+	public loadData: (control: SelectControl) => Promise<any>;
 	public set isShowItems(value: boolean) {
 		if (this.isShowItems === value) {
 			return;
@@ -82,17 +82,17 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 		this.updateDisplayValue();
 		this.valueChanged.fire(this, this.getValue());
 	}
-	protected getSearchButtonControl(): Button {
+	protected getSearchButtonControl(): ButtonControl {
 		if (this._searchBtn) {
 			return this._searchBtn;
 		}
-		this._searchBtn = new Button();
+		this._searchBtn = new ButtonControl();
 		this._searchBtn.addClass("select-search-btn");
 		this._searchBtn.content = this.getSearchButtonControlContent();
 		return this._searchBtn;
 	}
 	protected getSearchButtonControlContent(): IHtmlControl {
-		let svgElement = new Svg();
+		let svgElement = new SvgControl();
 		svgElement.viewBoxWidth = 350;
 		svgElement.viewBoxHeight = 350;
 		svgElement.addPath("M48,161A112,112,0,1,1,160,273,112.12,112.12,0,0,1,48,161ZM374.62,330.38l-81.23-81.24" +
@@ -104,7 +104,7 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 		if (this._displayContainer) {
 			return this._displayContainer;
 		}
-		this._displayContainer = new Container();
+		this._displayContainer = new ContainerControl();
 		this._displayContainer.addClass("select-display-container");
 		let displayControl = this.getDisplayControl();
 		let searchBtn = this.getSearchButtonControl();
@@ -116,7 +116,7 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 		if (this._displayControl) {
 			return this._displayControl;
 		}
-		this._displayControl = new Text();
+		this._displayControl = new TextControl();
 		this._displayControl.setValue(this.currentSelectedItem?.displayValue || "");
 		this._displayControl.addClass("select-display-control");
 		return this._displayControl;
@@ -125,13 +125,13 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 		if (this._itemsContainer) {
 			return this._itemsContainer;
 		}
-		this._itemsContainer = new Container();
+		this._itemsContainer = new ContainerControl();
 		this._itemsContainer.isVisible = this.isShowItems;
 		this._itemsContainer.addClass("select-items-container");
 		return this._itemsContainer;
 	}
 	protected createListItemControl(listItem: IListItem): IListItemControl {
-		let control = new SelectItem();
+		let control = new SelectItemControl();
 		control.setValue(listItem);
 		this.subscribeSelectItemEvents(control);
 		return control;
@@ -230,8 +230,8 @@ export class Select extends HTMLControl(HTMLDivElement) implements IValueControl
 	//endregion
 
 	public static register(): void {
-		customElements.define(ControlPrefix + "-select", Select, {extends: "div"});
+		customElements.define(ControlPrefix + "-select", SelectControl, {extends: "div"});
 	}
 }
 
-Select.register();
+SelectControl.register();

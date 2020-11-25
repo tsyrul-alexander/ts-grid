@@ -1,7 +1,7 @@
-import {BaseInput} from "./base-input";
+import {BaseInputControl} from "./base-input-control";
 import {ControlPrefix} from "../control";
 
-export class Float extends BaseInput<number> {
+export class FloatControl extends BaseInputControl<number> {
 	constructor() {
 		super();
 		this.initHTMLElementAttributes();
@@ -10,11 +10,11 @@ export class Float extends BaseInput<number> {
 		this.type = "number";
 	}
 	public static register(): void {
-		customElements.define(ControlPrefix + "-float", Float, {extends: "input"});
+		customElements.define(ControlPrefix + "-float", FloatControl, {extends: "input"});
 	}
 
-	getValue(): number {
+	public getValue(): number {
 		return Number.parseFloat(this.value);
 	}
 }
-Float.register();
+FloatControl.register();

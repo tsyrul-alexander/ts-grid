@@ -1,20 +1,20 @@
 import {BaseView} from "./base-view";
 import {RowViewModel} from "../view-model/row-view-model";
 import {IControl} from "./control/control";
-import {Container} from "./control/container/container";
+import {ContainerControl} from "./control/container/container-control";
 import {ICollection} from "../model/collection/collection";
 import {GridColumn} from "../model/grid/grid-column";
 import {GridColumnType} from "../model/grid/grid-column-type";
 import {NotImplementedException} from "../exception/not-implemented-exception";
-import {Integer} from "./control/input/integer";
+import {IntegerControl} from "./control/input/integer-control";
 import {IItemsControl} from "./control/items-control";
 import {IValueControl} from "./control/value-control";
-import {Text} from "./control/input/text";
+import {TextControl} from "./control/input/text-control";
 import {Utilities} from "../utilities";
-import {Select} from "./control/select/select";
+import {SelectControl} from "./control/select/select-control";
 import {IListItem} from "../model/list-item";
 import {Event, IEvent} from "../model/event/event";
-import {Float} from "./control/input/float";
+import {FloatControl} from "./control/input/float-control";
 
 export class RowView extends BaseView {
 	protected mainContainer: IItemsControl;
@@ -71,7 +71,7 @@ export class RowView extends BaseView {
 		column.isReadOnlyChanged.un(this.onGridColumnIsReadOnlyChanged, this);
 	}
 	protected createMainContainer(): IItemsControl {
-		let container = new Container();
+		let container = new ContainerControl();
 		container.addClass("row-view");
 		container.clickEvent.on(this.onMainContainerClick, this);
 		return container;
@@ -84,7 +84,7 @@ export class RowView extends BaseView {
 		this.columnControls.push(valueColumnControl);
 	}
 	protected getColumnContainerItemControl(valueColumnControl: IValueControl, column: GridColumn): IControl {
-		let containerItem = new Container();
+		let containerItem = new ContainerControl();
 		containerItem.tag = column.columnName;
 		containerItem.setAttribute("column", column.weight.toString());
 		containerItem.addClass("row-view-item");
@@ -108,27 +108,27 @@ export class RowView extends BaseView {
 		throw new NotImplementedException(column.type);
 	}
 	protected createStringControl(viewModel: RowViewModel, column: GridColumn): IValueControl {
-		let control = new Text();
+		let control = new TextControl();
 		this.setValueControlValues(control, viewModel, column);
 		return control;
 	}
 	protected createSelectControl(viewModel: RowViewModel, column: GridColumn): IValueControl {
-		let control = new Select();
+		let control = new SelectControl();
 		this.setValueControlValues(control, viewModel, column);
 		control.loadData = this.loadSelectData.bind(this, viewModel, column);
 		return control;
 	}
 	protected createFloatControl(viewModel: RowViewModel, column: GridColumn): IValueControl {
-		let control = new Float();
+		let control = new FloatControl();
 		this.setValueControlValues(control, viewModel, column);
 		return control;
 	}
 	protected createIntegerControl(viewModel: RowViewModel, column: GridColumn): IValueControl {
-		let control = new Integer();
+		let control = new IntegerControl();
 		this.setValueControlValues(control, viewModel, column);
 		return control;
 	}
-	protected loadSelectData(viewModel: RowViewModel, column: GridColumn, selectControl: Select): Promise<any> {
+	protected loadSelectData(viewModel: RowViewModel, column: GridColumn, selectControl: SelectControl): Promise<any> {
 		return new Promise<any>((resolve, reject) => {
 			selectControl.clear();
 			viewModel.getLookupValues(column.columnName, selectControl.searchText).then(listItems => {
@@ -137,7 +137,7 @@ export class RowView extends BaseView {
 			}).catch(reject);
 		});
 	}
-	protected setListItemsToSelectControl(selectControl: Select, listItems: IListItem[]) {
+	protected setListItemsToSelectControl(selectControl: SelectControl, listItems: IListItem[]) {
 		selectControl.addItems(listItems);
 	}
 	protected setValueControlValues(valueControl: IValueControl, viewModel: RowViewModel, column: GridColumn) {

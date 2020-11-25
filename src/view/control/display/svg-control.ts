@@ -1,7 +1,7 @@
 import {HTMLControl, IHtmlControl} from "../html-control";
 import {ControlPrefix} from "../control";
 
-export class Svg extends HTMLControl(HTMLDivElement) implements IHtmlControl {
+export class SvgControl extends HTMLControl(HTMLDivElement) implements IHtmlControl {
 	xmlns: string = "http://www.w3.org/2000/svg";
 	_svgElement: SVGSVGElement;
 	public get viewBoxX(): number {
@@ -79,8 +79,8 @@ export class Svg extends HTMLControl(HTMLDivElement) implements IHtmlControl {
 	}
 
 	public static register(): void {
-		customElements.define(ControlPrefix + "-svg", Svg, {extends: "div"});
+		customElements.define(ControlPrefix + "-svg", SvgControl, {extends: "div"});
 	}
 }
 
-Svg.register();
+SvgControl.register();

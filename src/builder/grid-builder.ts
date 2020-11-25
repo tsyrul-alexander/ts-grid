@@ -2,7 +2,7 @@ import {BaseBuilder, IBuilder} from "./base-builder";
 import {RowViewModel} from "../view-model/row-view-model";
 import {IRowBuilder, RowBuilder} from "./row-builder";
 import {GridColumn} from "../model/grid/grid-column";
-import {Container} from "../view/control/container/container";
+import {ContainerControl} from "../view/control/container/container-control";
 import {ColumnBuilder, IColumnBuilder} from "./column-builder";
 import {GridOptions} from "../model/grid/grid-options";
 import {IOptionBuilder, OptionsBuilder} from "./options-builder";
@@ -69,7 +69,7 @@ export class GridBuilder extends BaseBuilder implements IGridBuilder {
 		containerElement.appendChild(control.getHTMLElement());
 	}
 	public getControl(): IControl {
-		let container = new Container();
+		let container = new ContainerControl();
 		container.addClass("grid-container");
 		container.addItem(this.columnBuilder.getControl());
 		container.addItem(this.rowBuilder.getControl());

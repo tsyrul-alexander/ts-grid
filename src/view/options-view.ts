@@ -1,19 +1,19 @@
 import {BaseView} from "./base-view";
 import {IControl} from "./control/control";
-import {Container} from "./control/container/container";
+import {ContainerControl} from "./control/container/container-control";
 import {GridOptions} from "../model/grid/grid-options";
 import {IItemsControl} from "./control/items-control";
-import {Button} from "./control/button/button";
+import {ButtonControl} from "./control/button/button-control";
 import {IValueControl, IValueControlT} from "./control/value-control";
-import {Label} from "./control/display/label";
+import {LabelControl} from "./control/display/label-control";
 
 export class OptionsView extends BaseView {
 	protected isLoadAttributeName: string = "load";
 	protected emptyValueClassName: string = "empty-value";
 	protected mainControl: IItemsControl;
 	protected pageRowsCountControl: IValueControlT<string>;
-	protected nextRowsButton: Button;
-	protected previousRowsButton: Button;
+	protected nextRowsButton: ButtonControl;
+	protected previousRowsButton: ButtonControl;
 	protected loadControl: IControl;
 	protected errorMessageControl: IValueControlT<string>;
 	constructor(public options: GridOptions) {
@@ -27,7 +27,7 @@ export class OptionsView extends BaseView {
 		this.options.errorMessageChanged.on(this.onErrorMessageChanged, this);
 	}
 	protected createMainControl(): IItemsControl {
-		let container = new Container();
+		let container = new ContainerControl();
 		container.addClass("options-view");
 		container.addItem(this.createLeftContainer());
 		container.addItem(this.createCenterContainer());
@@ -35,19 +35,19 @@ export class OptionsView extends BaseView {
 		return container;
 	}
 	protected createLeftContainer(): IItemsControl {
-		let container = new Container();
+		let container = new ContainerControl();
 		container.addClass("options-view-left-container");
 		container.addItem(this.loadControl = this.createLoadControl());
 		return container;
 	}
 	protected createCenterContainer(): IItemsControl {
-		let container = new Container();
+		let container = new ContainerControl();
 		container.addClass("options-view-center-container");
 		container.addItem(this.errorMessageControl = this.getPageErrorMessageLabel());
 		return container;
 	}
 	protected createRightContainer(): IItemsControl {
-		let container = new Container();
+		let container = new ContainerControl();
 		container.addClass("options-view-right-container");
 		container.addItem(this.previousRowsButton = this.getPreviousRowsButton());
 		container.addItem(this.pageRowsCountControl = this.getPageRowsCountLabel());
@@ -55,33 +55,33 @@ export class OptionsView extends BaseView {
 		return container
 	}
 	protected createLoadControl(): IItemsControl {
-		let container = new Container();
+		let container = new ContainerControl();
 		container.addClass("options-load-control");
 		this.setIsLoadToControl(container);
 		return container;
 	}
-	protected getNextRowsButton(): Button {
-		let control = new Button();
+	protected getNextRowsButton(): ButtonControl {
+		let control = new ButtonControl();
 		control.addClass("next-button");
 		control.caption = "\u203A";
 		control.clickEvent.on(this.onNextRowsClick, this);
 		return control;
 	}
-	protected getPreviousRowsButton(): Button {
-		let control = new Button();
+	protected getPreviousRowsButton(): ButtonControl {
+		let control = new ButtonControl();
 		control.addClass("previous-button");
 		control.caption = "\u2039";
 		control.clickEvent.on(this.onPreviousRowsClick, this);
 		return control;
 	}
 	protected getPageRowsCountLabel(): IValueControl {
-		let control = new Label();
+		let control = new LabelControl();
 		control.addClass("page-row-count-text");
 		this.setPageRowsCountToControl(control);
 		return control;
 	}
 	protected getPageErrorMessageLabel(): IValueControl {
-		let control = new Label();
+		let control = new LabelControl();
 		control.addClass("options-error-message");
 		this.setErrorMessageToControl(control);
 		return control;

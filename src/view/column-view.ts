@@ -1,14 +1,13 @@
 import {BaseView} from "./base-view";
 import {IControl} from "./control/control";
 import {GridColumn} from "../model/grid/grid-column";
-import {Container} from "./control/container/container";
-import {Label} from "./control/display/label";
+import {ContainerControl} from "./control/container/container-control";
+import {LabelControl} from "./control/display/label-control";
 import {IItemsControl} from "./control/items-control";
 import {IValueControlT} from "./control/value-control";
 import {NotInitializeException} from "../exception/not-initialize-exception";
-import {Button} from "./control/button/button";
+import {ButtonControl} from "./control/button/button-control";
 import {Grid} from "../model/grid/grid";
-import {Text} from "./control/input/text";
 import {GridOptions} from "../model/grid/grid-options";
 import {GridColumnSortDirection} from "../model/grid/grid-column-sort-direction";
 
@@ -16,8 +15,8 @@ export class ColumnView extends BaseView {
 	protected mainContainer: IItemsControl;
 	protected captionControl: IValueControlT<string>;
 	protected orderControl: IValueControlT<string>;
-	protected nextOrderButton: Button;
-	protected previousOrderButton: Button;
+	protected nextOrderButton: ButtonControl;
+	protected previousOrderButton: ButtonControl;
 	constructor(public grid: Grid, public gridColumn: GridColumn) {
 		super();
 	}
@@ -58,16 +57,16 @@ export class ColumnView extends BaseView {
 	protected unsubscribeCaptionLabelEvents(control: IValueControlT<string>): void {
 		control.clickEvent.un(this.onCaptionLabelClick, this);
 	}
-	protected subscribeNextOrderButtonEvents(control: Button): void {
+	protected subscribeNextOrderButtonEvents(control: ButtonControl): void {
 		control.clickEvent.on(this.onNextOrderClick, this);
 	}
-	protected unsubscribeNextOrderButtonEvents(control: Button): void {
+	protected unsubscribeNextOrderButtonEvents(control: ButtonControl): void {
 		control.clickEvent.on(this.onNextOrderClick, this);
 	}
-	protected subscribePreviousOrderButtonEvents(control: Button): void {
+	protected subscribePreviousOrderButtonEvents(control: ButtonControl): void {
 		control.clickEvent.on(this.onPreviousOrderClick, this);
 	}
-	protected unsubscribePreviousOrderButtonEvents(control: Button): void {
+	protected unsubscribePreviousOrderButtonEvents(control: ButtonControl): void {
 		control.clickEvent.on(this.onPreviousOrderClick, this);
 	}
 	protected onSortColumnChanged(option: GridOptions, column: GridColumn) {
@@ -107,31 +106,31 @@ export class ColumnView extends BaseView {
 		}
 	}
 	protected createMainContainer(): IItemsControl {
-		let container = new Container();
+		let container = new ContainerControl();
 		container.addClass("column-view");
 		this.setColumnWeightToControl(container, this.gridColumn);
 		this.setColumnOrderToControl(container, this.gridColumn);
 		return container;
 	}
 	protected createCaptionLabel(): IValueControlT<string> {
-		let label = new Label();
+		let label = new LabelControl();
 		label.setValue(this.gridColumn.caption);
 		return label;
 	}
-	protected getNextOrderButton(): Button {
-		let control = new Button();
+	protected getNextOrderButton(): ButtonControl {
+		let control = new ButtonControl();
 		control.addClass("next-button");
 		control.caption = "\u203A";
 		return control;
 	}
-	protected getPreviousOrderButton(): Button {
-		let control = new Button();
+	protected getPreviousOrderButton(): ButtonControl {
+		let control = new ButtonControl();
 		control.addClass("previous-button");
 		control.caption = "\u2039";
 		return control;
 	}
 	protected getOrderLabel(): IValueControlT<string> {
-		let control = new Label();
+		let control = new LabelControl();
 		control.addClass("order-label");
 		control.setValue("\u203A");
 		return control;

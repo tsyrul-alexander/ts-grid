@@ -8,7 +8,7 @@ export interface IListItemControl extends IHtmlControl, IValueControlT<IListItem
 	selectedEvent: IEvent<IListItemControl, any>;
 }
 
-export class SelectItem extends HTMLControl(HTMLDivElement) implements IListItemControl {
+export class SelectItemControl extends HTMLControl(HTMLDivElement) implements IListItemControl {
 	_value: IListItem;
 	selectedEvent: IEvent<IListItemControl, any> = new Event<IListItemControl, any>();
 	valueChanged: IEvent<IValueControlT<IListItem>, any> = new Event<IValueControlT<IListItem>, any>();
@@ -37,8 +37,8 @@ export class SelectItem extends HTMLControl(HTMLDivElement) implements IListItem
 		this.removeEventListener("click", this.onItemClick);
 	}
 	public static register(): void {
-		customElements.define(ControlPrefix + "-select-item", SelectItem, {extends: "div"});
+		customElements.define(ControlPrefix + "-select-item", SelectItemControl, {extends: "div"});
 	}
 }
 
-SelectItem.register();
+SelectItemControl.register();

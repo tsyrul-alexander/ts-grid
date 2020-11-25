@@ -2,7 +2,7 @@ import {ControlPrefix, IControl} from "../control";
 import {HTMLControl} from "../html-control";
 import {IItemsControl} from "../items-control";
 
-export class Container extends HTMLControl(HTMLDivElement) implements IItemsControl, HTMLDivElement {
+export class ContainerControl extends HTMLControl(HTMLDivElement) implements IItemsControl, HTMLDivElement {
 	constructor() {
 		super();
 		this.initHTMLElementClasses();
@@ -34,8 +34,8 @@ export class Container extends HTMLControl(HTMLDivElement) implements IItemsCont
 	}
 
 	public static register(): void {
-		customElements.define(ControlPrefix + "-container", Container, {extends: "div"});
+		customElements.define(ControlPrefix + "-container", ContainerControl, {extends: "div"});
 	}
 }
 
-Container.register();
+ContainerControl.register();
