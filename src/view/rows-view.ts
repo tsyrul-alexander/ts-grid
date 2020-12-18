@@ -1,6 +1,6 @@
 import {BaseView} from "./base-view";
 import {IControl} from "./control/control";
-import {Container} from "./control/container/container";
+import {ContainerControl} from "./control/container/container-control";
 import {RowViewModel} from "../view-model/row-view-model";
 import {RowView} from "./row-view";
 import {IItemsControl} from "./control/items-control";
@@ -23,7 +23,7 @@ export class RowsView extends BaseView {
 		return rowView;
 	}
 	protected createMainContainer(): IItemsControl {
-		let container = new Container();
+		let container = new ContainerControl();
 		container.addClass("rows-view");
 		return container;
 	}

@@ -14,7 +14,7 @@ export class FloatControl extends BaseInputControl<number> {
 	}
 
 	public getValue(): number {
-		return Number.parseFloat(this.value);
+		return this.valueAsNumber;
 	}
 }
 FloatControl.register();

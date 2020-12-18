@@ -21,14 +21,17 @@ export abstract class BaseInputControl<T> extends HTMLControl(HTMLInputElement) 
 	public connected() {
 		super.connected();
 		this.addEventListener('change', this.onValueChangedEvent);
+		this.addEventListener('input', this.onValueInputEvent);
 	}
 	public disconnected() {
 		super.disconnected();
 		this.removeEventListener('change', this.onValueChangedEvent);
+		this.removeEventListener('input', this.onValueInputEvent);
 	}
 	protected onValueChangedEvent() {
 		this.onValueChanged();
 	}
+	protected onValueInputEvent() {}
 	protected onValueChanged() {
 		let newValue = this.getValue();
 		if (!this.getIsValueChange(newValue)) {
@@ -36,6 +39,9 @@ export abstract class BaseInputControl<T> extends HTMLControl(HTMLInputElement) 
 		}
 		this.valueChanged.fire(this, newValue);
 		this.setOldValue(newValue);
+	}
+	protected valueToStr(value: T): string {
+		return value && value.toString() || "";
 	}
 	protected getIsValueChange(newValue: any): boolean {
 		return this.oldValue !== newValue;
@@ -45,10 +51,10 @@ export abstract class BaseInputControl<T> extends HTMLControl(HTMLInputElement) 
 	}
 	public abstract getValue(): T;
 	public setValue(value: T): void {
-		let newValue = value && value.toString() || "";
-		if (newValue === this.value) {
+		let newValueStr = this.valueToStr(value);
+		if (newValueStr === this.value) {
 			return;
 		}
-		this.value = newValue;
+		this.value = newValueStr;
 	}
 }
