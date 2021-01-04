@@ -7,8 +7,8 @@ import {GridColumnSortDirection} from "./model/grid/grid-column-sort-direction";
 
 export abstract class GridContentBuilder {
 	//region Private Properties
-	protected _gridBuilder: IGridBuilder;
 	protected _option: GridOptions;
+	protected _isRenderer: boolean = false;
 	//endregion
 
 	//region Public Properties only get
@@ -27,9 +27,6 @@ export abstract class GridContentBuilder {
 	}
 	public get grid(): Grid {
 		return this.gridBuilder.grid;
-	}
-	public get sortColumn(): GridColumn {
-		return this.options.sortColumn;
 	}
 	public get sortDirection(): GridColumnSortDirection {
 		return this.options.sortDirection;
@@ -56,6 +53,12 @@ export abstract class GridContentBuilder {
 	public set pageIndex(value: number) {
 		this.options.pageIndex = value;
 	}
+	public get sortColumn(): GridColumn {
+		return this.options.sortColumn;
+	}
+	public set sortColumn(column: GridColumn) {
+		this.options.sortColumn = column;
+	}
 	//endregion
 
 	//region Protected Methods
@@ -72,6 +75,9 @@ export abstract class GridContentBuilder {
 		this.reloadData();
 	}
 	protected loadGridData() {
+		if (!this._isRenderer) {
+			return;
+		}
 		this.beforeLoadGridData();
 		let loadDataPromise = this.loadData();
 		loadDataPromise.then(this.onLoadGridDataSuccess.bind(this))
@@ -133,6 +139,7 @@ export abstract class GridContentBuilder {
 	public abstract loadData(): Promise<any>;
 	public render(containerElement: HTMLElement): void {
 		this.gridBuilder.render(containerElement);
+		this._isRenderer = true;
 	}
 	public addRow(data: any): RowViewModel {
 		return this.gridBuilder.addRow(data);
@@ -142,6 +149,9 @@ export abstract class GridContentBuilder {
 	}
 	public addColumn(column: GridColumn): void {
 		this.gridBuilder.addColumn(column);
+	}
+	public getColumnByName(columnName: string): GridColumn | null {
+		return this.grid.columns.getItemByFn(item => item.columnName === columnName);
 	}
 	public destroy(): void {
 		this.unsubscribeGridEvent(this.gridBuilder.grid);

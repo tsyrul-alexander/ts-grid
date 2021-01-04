@@ -16,6 +16,7 @@ import {IListItem} from "../model/list-item";
 import {Event, IEvent} from "../model/event/event";
 import {FloatControl} from "./control/input/float-control";
 import {DateControl} from "./control/input/date-control";
+import {DateTimeControl} from "./control/input/date-time-control";
 
 export class RowView extends BaseView {
 	protected mainContainer: IItemsControl;
@@ -109,10 +110,18 @@ export class RowView extends BaseView {
 		if (column.type === GridColumnType.date) {
 			return this.createDateControl(viewModel, column);
 		}
+		if (column.type === GridColumnType.dateTime) {
+			return this.createDateTimeControl(viewModel, column);
+		}
 		throw new NotImplementedException(column.type);
 	}
 	protected createStringControl(viewModel: RowViewModel, column: GridColumn): IValueControl {
 		let control = new TextControl();
+		this.setValueControlValues(control, viewModel, column);
+		return control;
+	}
+	protected createDateTimeControl(viewModel: RowViewModel, column: GridColumn): IValueControl {
+		let control = new DateTimeControl();
 		this.setValueControlValues(control, viewModel, column);
 		return control;
 	}

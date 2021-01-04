@@ -9,6 +9,7 @@ export interface ICollection<T> {
 	remove(item: T): void;
 	toArray(): T[];
 	clear();
+	getItemByFn(fn: (value: T, index: number) => boolean): T | null;
 	each(callbackfn: (value: T, index: number) => void, thisArg?: any): void;
 	getByIndex(index: number): T | null;
 }
@@ -50,5 +51,8 @@ export class Collection<T> extends BaseObject implements ICollection<T> {
 	}
 	public getByIndex(index: number): T | null {
 		return this.items[index] || null;
+	}
+	public getItemByFn(fn: (value: T, index: number) => boolean): T | null{
+		return Utilities.getItemByFn(this.items, fn);
 	}
 }

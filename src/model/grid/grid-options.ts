@@ -17,7 +17,7 @@ export class GridOptions {
 	private _isLoad: boolean = false;
 	private _errorMessage: string = null;
 	private _sortColumn: GridColumn = null;
-	private _sortDirection: GridColumnSortDirection = null;
+	private _sortDirection: GridColumnSortDirection = GridColumnSortDirection.ASC;
 
 	public get rowCount(): number {
 		return this._rowCount;

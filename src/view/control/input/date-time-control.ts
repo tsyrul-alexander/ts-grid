@@ -1,7 +1,7 @@
 import {ControlPrefix} from "../control";
 import {BaseDateControl} from "./base-date-control";
 
-export class DateControl extends BaseDateControl {
+export class DateTimeControl extends BaseDateControl {
 	constructor() {
 		super();
 		this.initHTMLElementAttributes();
@@ -9,23 +9,22 @@ export class DateControl extends BaseDateControl {
 	}
 	protected initHTMLClasses() {
 		super.initHTMLClasses();
-		this.addClass("date-input");
+		this.addClass("date-time-input");
 	}
 	protected initHTMLElementAttributes(): void {
 		super.initHTMLElementAttributes();
-		this.type = "date";
-		this.pattern="\d{2}-\d{2}-\d{4}";
+		this.type = "datetime-local";
 	}
 	protected valueToStr(value: Date | null): string | null {
 		if (!value) {
 			return "";
 		}
-		return this.getDateDefaultStr(value);
+		return this.getDateTimeDefaultStr(value);
 	}
 
 	public static register(): void {
-		customElements.define(ControlPrefix + "-date", DateControl, {extends: "input"});
+		customElements.define(ControlPrefix + "-date-time", DateTimeControl, {extends: "input"});
 	}
 }
 
-DateControl.register();
+DateTimeControl.register();

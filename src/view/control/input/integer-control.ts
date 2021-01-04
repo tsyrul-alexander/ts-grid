@@ -7,6 +7,7 @@ export class IntegerControl extends BaseInputControl<number> {
 		this.initHTMLElementAttributes();
 	}
 	protected initHTMLElementAttributes(): void {
+		super.initHTMLElementAttributes();
 		this.type = "number";
 		this.step = String(1);
 	}

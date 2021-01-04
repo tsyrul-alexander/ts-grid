@@ -14,10 +14,12 @@ export abstract class BaseInputControl<T> extends HTMLControl(HTMLInputElement) 
 	protected constructor() {
 		super();
 		this.initHTMLClasses();
+		this.initHTMLElementAttributes();
 	}
 	protected initHTMLClasses() {
 		this.addClass("base-input");
 	}
+	protected initHTMLElementAttributes() {}
 	public connected() {
 		super.connected();
 		this.addEventListener('change', this.onValueChangedEvent);

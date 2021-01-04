@@ -8,6 +8,7 @@ export class TextControl extends BaseInputControl<string> {
 	}
 
 	protected initHTMLElementAttributes(): void {
+		super.initHTMLElementAttributes();
 		this.type = "text";
 	}
 	public connected() {

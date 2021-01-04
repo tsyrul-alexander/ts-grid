@@ -11,6 +11,14 @@ export class Utilities {
 		}
 		return null;
 	}
+	static getItemByFn<T extends object>(items: T[], fn: (value: T, index: number) => boolean): T | null {
+		for (let i=0;i<items.length; i++) {
+			if (fn(items[i], i)) {
+				return items[i];
+			}
+		}
+		return null;
+	}
 	static getItemByObj<T>(items: T[], searchObject: any): T | null {
 		let result = Utilities.getItemsByObj<T>(items, searchObject);
 		return result && result[0];

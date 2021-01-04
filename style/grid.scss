@@ -1,7 +1,7 @@
 $container-column-percentage: 4%;
 $container-margin: 5px 5px 5px 5px;
 $container-row-margin: 5px 5px 5px 5px;
-$fontSize: 19px;
+$fontSize: 15px;
 
 .grid-container {
 	border: 1px double;
@@ -33,7 +33,7 @@ $fontSize: 19px;
 				content: '';
 				border-top: 2px solid;
 				margin: 0 5px 0 5px;
-				flex: 1 0 20px;
+				flex: 1 0 10px;
 			}
 			&[order-direction="1"] > .order-label {
 				transform: rotate(-90deg);

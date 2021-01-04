@@ -7,6 +7,7 @@ export class FloatControl extends BaseInputControl<number> {
 		this.initHTMLElementAttributes();
 	}
 	protected initHTMLElementAttributes(): void {
+		super.initHTMLElementAttributes();
 		this.type = "number";
 	}
 	public static register(): void {
