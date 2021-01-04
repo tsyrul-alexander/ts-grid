@@ -102,7 +102,19 @@ $fontSize: 15px;
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
 }
-@media screen and (min-width: 800px) {
+@media screen and (max-width: 600px) {
+	.grid-container {
+		.row-view,
+		.columns-view {
+			flex-direction: column;
+		}
+		.row-view {
+			border: 1px double;
+			border-radius: 10px;
+		}
+	}
+}
+@media screen and (min-width: 600px) {
 	.grid-container {
 		.container {
 			[column="1"] {
