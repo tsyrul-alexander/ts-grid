@@ -57,6 +57,12 @@ export class ColumnView extends BaseView {
 	protected unsubscribeCaptionLabelEvents(control: IValueControlT<string>): void {
 		control.clickEvent.un(this.onCaptionLabelClick, this);
 	}
+	protected subscribeOrderLabelEvents(control: IValueControlT<string>): void {
+		control.clickEvent.on(this.onOrderLabelClick, this);
+	}
+	protected unsubscribeOrderLabelEvents(control: IValueControlT<string>): void {
+		control.clickEvent.un(this.onOrderLabelClick, this);
+	}
 	protected subscribeNextOrderButtonEvents(control: ButtonControl): void {
 		control.clickEvent.on(this.onNextOrderClick, this);
 	}
@@ -95,7 +101,7 @@ export class ColumnView extends BaseView {
 		}
 		this.setColumnOrderToControl(this.mainContainer, column);
 	}
-	protected onCaptionLabelClick() {
+	protected changeColumnSort() {
 		if (this.grid.options.isLoad) {
 			return;
 		}
@@ -104,6 +110,12 @@ export class ColumnView extends BaseView {
 		} else {
 			this.setSortColumn(this.gridColumn);
 		}
+	}
+	protected onCaptionLabelClick() {
+		this.changeColumnSort();
+	}
+	protected onOrderLabelClick() {
+		this.changeColumnSort();
 	}
 	protected createMainContainer(): IItemsControl {
 		let container = new ContainerControl();
@@ -190,6 +202,7 @@ export class ColumnView extends BaseView {
 		this.subscribeGridColumnEvents(this.gridColumn);
 		this.subscribeGridEvents(this.grid);
 		this.subscribeCaptionLabelEvents(this.captionControl);
+		this.subscribeOrderLabelEvents(this.orderControl);
 		this.subscribeNextOrderButtonEvents(this.nextOrderButton);
 		this.subscribePreviousOrderButtonEvents(this.previousOrderButton);
 	}
@@ -198,6 +211,7 @@ export class ColumnView extends BaseView {
 		this.unsubscribeGridColumnEvents(this.gridColumn);
 		this.unsubscribeGridEvents(this.grid);
 		this.unsubscribeCaptionLabelEvents(this.captionControl);
+		this.unsubscribeOrderLabelEvents(this.orderControl);
 		this.unsubscribeNextOrderButtonEvents(this.nextOrderButton);
 		this.unsubscribePreviousOrderButtonEvents(this.previousOrderButton);
 	}
